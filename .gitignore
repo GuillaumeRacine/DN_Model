@@ -42,3 +42,16 @@ Thumbs.db
 
 # Environment files
 .env
+
+# Private wallet configuration
+wallet-positions.json
+positions.private.json
+my-positions.json
+positionsID.md
+
+# Archive and unused files
+scripts/archive/
+components/unused/
+
+# Log files
+*.log

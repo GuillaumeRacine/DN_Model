@@ -1,0 +1,79 @@
+{
+  "_instructions": "Copy this file to wallet-positions.json and add your wallet data",
+  "_note": "wallet-positions.json is git-ignored for privacy",
+  "version": "1.0",
+  "description": "Private wallet positions configuration - DO NOT COMMIT TO GIT",
+  "wallets": {
+    "YOUR_WALLET_ADDRESS_HERE": {
+      "name": "My Primary Wallet",
+      "chain": "solana",
+      "positions": [
+        {
+          "nftId": "YOUR_NFT_POSITION_ID_HERE",
+          "type": "Orca Whirlpool",
+          "protocol": "Orca",
+          "pool": "SOL/USDC",
+          "value": 25000.00,
+          "tokens": [
+            {
+              "symbol": "SOL",
+              "amount": 100.0,
+              "value": 20000.00
+            },
+            {
+              "symbol": "USDC", 
+              "amount": 5000.0,
+              "value": 5000.00
+            }
+          ],
+          "status": "Active",
+          "apr": 15.2,
+          "range": {
+            "min": 180,
+            "max": 220,
+            "current": 200.5
+          },
+          "lastUpdated": "2025-08-27T16:30:00Z",
+          "notes": "Main position"
+        }
+      ]
+    },
+    "ANOTHER_WALLET_ADDRESS": {
+      "name": "Secondary Wallet",
+      "chain": "ethereum", 
+      "positions": [
+        {
+          "nftId": "ETHEREUM_NFT_POSITION_ID",
+          "type": "Uniswap V3",
+          "protocol": "Uniswap V3",
+          "pool": "ETH/USDC",
+          "value": 15000.00,
+          "tokens": [
+            {"symbol": "ETH", "amount": 5.0, "value": 12500.00},
+            {"symbol": "USDC", "amount": 2500.0, "value": 2500.00}
+          ],
+          "status": "Active",
+          "apr": 8.5,
+          "range": {"min": 3200, "max": 3800, "current": 3500},
+          "lastUpdated": "2025-08-27T16:30:00Z",
+          "notes": "Cross-chain position"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "lastScanned": "2025-08-27T16:30:00Z",
+    "totalWallets": 2,
+    "totalPositions": 2,
+    "supportedChains": ["solana", "ethereum", "arbitrum", "optimism", "base"],
+    "supportedProtocols": ["Orca", "Raydium", "Meteora", "Uniswap V3", "Aerodrome"],
+    "_howToAddPositions": [
+      "1. Find your position NFT IDs on the protocol websites or block explorers",
+      "2. Add wallet addresses as keys in the wallets object", 
+      "3. Add position objects to the positions array for each wallet",
+      "4. Update token amounts, values, and ranges with current data",
+      "5. Run 'node scripts/validate-positions.js' to check syntax",
+      "6. Test with 'npm run dev' and check the web interface"
+    ]
+  }
+}

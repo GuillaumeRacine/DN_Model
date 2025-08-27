@@ -236,6 +236,135 @@ npm run type-check   # TypeScript validation
 **Error Handling**: Comprehensive try/catch with user feedback
 **Performance**: Optimized for large datasets (100+ pools)
 
+## 🧪 Testing & Debugging Protocol
+
+**CRITICAL FINAL STEP:** Always test new code thoroughly and ensure accurate data display before considering any task complete.
+
+### **📋 Mandatory Testing Checklist**
+
+**🔴 BEFORE MARKING ANY TASK COMPLETE:**
+
+1. **✅ Functional Testing**
+   ```bash
+   npm run dev          # Start development server
+   # Navigate to http://localhost:3002
+   # Test ALL affected components/features
+   # Verify data loads correctly
+   # Check console for errors
+   ```
+
+2. **✅ Data Accuracy Validation**
+   - Compare displayed data with source APIs
+   - Verify calculations are mathematically correct
+   - Check edge cases (empty data, API failures)
+   - Confirm UI displays match expected values
+
+3. **✅ Cross-Component Integration**
+   - Test component interactions
+   - Verify state management works correctly
+   - Check data flows between components
+   - Ensure no broken dependencies
+
+4. **✅ Error Handling**
+   - Test with failed API calls
+   - Verify graceful fallbacks work
+   - Check error messages are user-friendly
+   - Ensure no unhandled promise rejections
+
+5. **✅ Performance & Console Health**
+   ```bash
+   # Check browser console for:
+   - No console errors (red)
+   - No unhandled warnings (yellow)
+   - No infinite re-renders
+   - No memory leaks in long sessions
+   ```
+
+### **🔍 Debugging Process**
+
+**When Issues Are Found:**
+
+1. **Isolate the Problem**
+   - Use browser dev tools
+   - Add console.log statements
+   - Check network tab for API calls
+   - Verify data structures
+
+2. **Fix & Re-test**
+   - Address root cause, not just symptoms
+   - Test fix in isolation
+   - Re-run full testing checklist
+   - Document what was fixed
+
+3. **Validate Resolution**
+   - Confirm original issue is resolved
+   - Check no new issues were introduced
+   - Test related functionality still works
+   - Update documentation if needed
+
+### **📊 Test Data Verification**
+
+**For Financial/Trading Data:**
+- ✅ Prices within realistic ranges
+- ✅ Percentages properly formatted (e.g., 12.5%, not 0.125)
+- ✅ Currency values show correct decimal places
+- ✅ Large numbers use appropriate formatting (1.2M, not 1200000)
+- ✅ Null/undefined values handled gracefully
+
+**For Position/Portfolio Data:**
+- ✅ Position values sum correctly
+- ✅ Token amounts match expected precision
+- ✅ Status indicators reflect reality
+- ✅ Historical data shows realistic patterns
+- ✅ All position types display properly
+
+### **🚨 Quality Gates**
+
+**DO NOT COMPLETE ANY TASK UNTIL:**
+- [ ] All console errors are resolved
+- [ ] Data displays accurately in UI
+- [ ] User interactions work smoothly
+- [ ] Error states are handled gracefully
+- [ ] Performance is acceptable
+- [ ] Code changes don't break existing features
+
+### **💡 Testing Commands**
+
+```bash
+# Essential testing commands
+npm run dev          # Development server
+npm run build        # Test production build
+npm run lint         # Check code quality
+npm run type-check   # Verify TypeScript
+
+# Debug specific issues
+node scripts/test-api.js           # Test API connections
+node scripts/position-scanner.js   # Scan for positions
+node scripts/add-position.js       # Test position management
+```
+
+### **📝 Testing Documentation**
+
+**When Adding New Features:**
+1. Document test cases in comments
+2. Create test data examples
+3. List known limitations
+4. Provide debugging instructions
+
+**Example:**
+```typescript
+// TEST CASES:
+// ✅ Valid position NFT detection
+// ✅ Multiple positions display
+// ✅ Error handling for failed API calls
+// ✅ Loading states work correctly
+// ❌ Known limitation: RPC rate limiting
+```
+
+---
+
+**⚡ REMEMBER: Code that works in theory but fails in practice is not complete. Always test until the data is accurate and the user experience is smooth.**
+
 ---
 
 **Built for:** Delta neutral CLM strategies, DeFi yield farming, risk management

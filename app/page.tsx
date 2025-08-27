@@ -5,6 +5,12 @@ import { useAppStore } from '../lib/store';
 import TopPoolsTab from '../components/TopPoolsTab';
 import PerpetualTab from '../components/PerpetualTab';
 import SimplifiedHome from '../components/SimplifiedHome';
+// import PositionMonitor from '../components/PositionMonitor';
+// import SolanaPositionMonitor from '../components/SolanaPositionMonitor';
+// import WalletPortfolioTracker from '../components/WalletPortfolioTracker';
+// import SimplifiedPositionChecker from '../components/SimplifiedPositionChecker';
+// import CoinStatsWalletTracker from '../components/CoinStatsWallet';
+import CLMPositionDashboard from '../components/CLMPositionDashboard';
 
 export default function Dashboard() {
   const { viewMode, setViewMode } = useAppStore();
@@ -37,13 +43,7 @@ export default function Dashboard() {
         {viewMode === 'home' && <SimplifiedHome />}
         {viewMode === 'pools' && <TopPoolsTab />}
         {viewMode === 'perps' && <PerpetualTab />}
-        {viewMode === 'dn model' && (
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">DN Model</h2>
-            <p className="text-gray-600 dark:text-gray-400">Advanced DeFi Analytics Dashboard</p>
-            <p className="text-sm text-gray-500 mt-2">Coming Soon...</p>
-          </div>
-        )}
+        {viewMode === 'dn model' && <CLMPositionDashboard />}
       </div>
     </div>
   );
