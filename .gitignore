@@ -38,3 +38,7 @@ next-env.d.ts
 
 # OS
 Thumbs.db
+._*
+
+# Environment files
+.env

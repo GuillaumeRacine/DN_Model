@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = 'https://api.llama.fi';
+const PRO_BASE_URL = 'https://pro-api.llama.fi';
 
 export interface ChainTvl {
   date: number;
@@ -98,6 +99,15 @@ export interface StablePool {
 class DefiLlamaAPI {
   private axiosInstance = axios.create({
     baseURL: BASE_URL,
+    timeout: 30000,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+
+  private proAxiosInstance = axios.create({
+    baseURL: `${PRO_BASE_URL}/${process.env.DEFILLAMA_API_KEY || process.env.NEXT_PUBLIC_DEFILLAMA_API_KEY}`,
     timeout: 30000,
     headers: {
       'Accept': 'application/json',
@@ -219,6 +229,243 @@ class DefiLlamaAPI {
       dexVolumes: targetDexVolumes
     };
   }
+
+  // Get current token prices (Pro API)
+  async getCurrentPrices(coins: string[]): Promise<any> {
+    try {
+      const coinsParam = coins.join(',');
+      const { data } = await this.proAxiosInstance.get(`/coins/prices/current/${coinsParam}`);
+      return data;
+    } catch (error) {
+      console.error('Error fetching current prices from Pro API:', error);
+      return {};
+    }
+  }
+
+  // Get token price changes (Pro API)
+  async getPriceChanges(coins: string[]): Promise<any> {
+    try {
+      const coinsParam = coins.join(',');
+      const { data } = await this.proAxiosInstance.get(`/coins/percentage/${coinsParam}`);
+      return data;
+    } catch (error) {
+      console.error('Error fetching price changes from Pro API:', error);
+      return {};
+    }
+  }
+
+  // Get historical prices (Pro API)
+  async getHistoricalPrices(coins: string[], timestamp: number): Promise<any> {
+    try {
+      const coinsParam = coins.join(',');
+      const { data } = await this.proAxiosInstance.get(`/coins/prices/historical/${timestamp}/${coinsParam}`);
+      return data;
+    } catch (error) {
+      console.error('Error fetching historical prices from Pro API:', error);
+      return {};
+    }
+  }
+
+  // Get price charts (Pro API)
+  async getPriceCharts(coins: string[]): Promise<any> {
+    try {
+      const coinsParam = coins.join(',');
+      const { data } = await this.proAxiosInstance.get(`/coins/chart/${coinsParam}`);
+      return data;
+    } catch (error) {
+      console.error('Error fetching price charts from Pro API:', error);
+      return {};
+    }
+  }
+
+  // Get yield pools data (Pro API)
+  async getYieldPools(): Promise<any> {
+    try {
+      const { data } = await this.proAxiosInstance.get('/yields/pools');
+      return data;
+    } catch (error) {
+      console.error('Error fetching yield pools from Pro API:', error);
+      return { data: [] };
+    }
+  }
+
+  // Get pool chart data (Pro API)
+  async getPoolChart(poolId: string): Promise<any> {
+    try {
+      const { data } = await this.proAxiosInstance.get(`/yields/chart/${poolId}`);
+      return data;
+    } catch (error) {
+      console.error(`Error fetching pool chart for ${poolId} from Pro API:`, error);
+      return {};
+    }
+  }
+
+  // Get derivatives/perpetuals overview
+  async getDerivativesOverview(): Promise<any> {
+    try {
+      const { data } = await this.axiosInstance.get('/overview/derivatives');
+      return data;
+    } catch (error) {
+      console.error('Error fetching derivatives overview:', error);
+      return {};
+    }
+  }
+
+  // Get DEX perpetuals only (filtered from derivatives)
+  async getDEXPerpetuals(): Promise<any> {
+    try {
+      const data = await this.getDerivativesOverview();
+      
+      if (!data.protocols) {
+        return { protocols: [] };
+      }
+
+      // Filter for DEX-only protocols (exclude CEXes)
+      const dexProtocols = data.protocols.filter((protocol: any) => {
+        const name = protocol.name?.toLowerCase() || '';
+        const category = protocol.category?.toLowerCase() || '';
+        
+        // Exclude known CEXes and include only derivatives/perps
+        const isCEX = name.includes('binance') || 
+                     name.includes('bybit') || 
+                     name.includes('okx') || 
+                     name.includes('coinbase') ||
+                     name.includes('kraken') ||
+                     name.includes('bitget') ||
+                     name.includes('kucoin') ||
+                     name.includes('huobi') ||
+                     name.includes('mexc') ||
+                     category.includes('cex');
+        
+        const isDerivatives = category.includes('derivatives') || 
+                            name.includes('perp') || 
+                            name.includes('perpetual') ||
+                            name.includes('futures') ||
+                            category.includes('synthetics');
+        
+        return !isCEX && isDerivatives && protocol.total24h > 0;
+      });
+
+      return {
+        ...data,
+        protocols: dexProtocols
+      };
+    } catch (error) {
+      console.error('Error fetching DEX perpetuals:', error);
+      return { protocols: [] };
+    }
+  }
+
+  // Get individual perpetual contracts from multiple protocols
+  async getIndividualPerpetualContracts(): Promise<any> {
+    try {
+      const allContracts: any[] = [];
+
+      // 1. Get Hyperliquid perpetual contracts
+      try {
+        const hyperliquidResponse = await fetch('https://api.hyperliquid.xyz/info', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ type: 'meta' })
+        });
+        
+        const hyperliquidData = await hyperliquidResponse.json();
+        
+        if (hyperliquidData?.universe) {
+          hyperliquidData.universe.forEach((market: any) => {
+            allContracts.push({
+              protocol: 'Hyperliquid',
+              chain: 'Hyperliquid L1',
+              pair: `${market.name}-USD`,
+              baseCurrency: market.name,
+              quoteCurrency: 'USD',
+              maxLeverage: market.maxLeverage || 20,
+              volume24h: 0, // Would need additional API calls
+              isActive: !market.isDelisted,
+              category: 'Perpetual',
+              logo: 'https://hyperliquid.xyz/favicon.ico'
+            });
+          });
+        }
+      } catch (error) {
+        console.warn('Hyperliquid API error:', error);
+      }
+
+      // 2. Get GMX V2 Arbitrum perpetual contracts
+      try {
+        const gmxResponse = await fetch('https://arbitrum-api.gmxinfra.io/prices/tickers');
+        const gmxData = await gmxResponse.json();
+        
+        if (Array.isArray(gmxData)) {
+          // Filter for major tokens that likely have perpetuals
+          const majorTokens = gmxData.filter((token: any) => 
+            ['BTC', 'ETH', 'ARB', 'AVAX', 'LINK', 'UNI', 'LTC', 'DOGE', 'SOL', 'XRP', 'ADA', 'MATIC'].includes(token.tokenSymbol)
+          );
+          
+          majorTokens.forEach((token: any) => {
+            allContracts.push({
+              protocol: 'GMX V2',
+              chain: 'Arbitrum',
+              pair: `${token.tokenSymbol}-USD`,
+              baseCurrency: token.tokenSymbol,
+              quoteCurrency: 'USD',
+              maxLeverage: 50,
+              volume24h: 0, // Would need additional API calls
+              price: parseFloat(token.minPrice) / 1e30,
+              lastUpdate: new Date(token.updatedAt),
+              category: 'Perpetual',
+              logo: 'https://gmx.io/favicon.ico'
+            });
+          });
+        }
+      } catch (error) {
+        console.warn('GMX API error:', error);
+      }
+
+      // 3. Add known major contracts from other protocols (estimated data)
+      const knownContracts = [
+        // Jupiter Perpetual (Solana)
+        { protocol: 'Jupiter Perpetual', chain: 'Solana', pair: 'BTC-USD', baseCurrency: 'BTC', quoteCurrency: 'USD', maxLeverage: 10 },
+        { protocol: 'Jupiter Perpetual', chain: 'Solana', pair: 'ETH-USD', baseCurrency: 'ETH', quoteCurrency: 'USD', maxLeverage: 10 },
+        { protocol: 'Jupiter Perpetual', chain: 'Solana', pair: 'SOL-USD', baseCurrency: 'SOL', quoteCurrency: 'USD', maxLeverage: 10 },
+        
+        // Drift Trade (Solana)
+        { protocol: 'Drift Trade', chain: 'Solana', pair: 'BTC-USD', baseCurrency: 'BTC', quoteCurrency: 'USD', maxLeverage: 10 },
+        { protocol: 'Drift Trade', chain: 'Solana', pair: 'ETH-USD', baseCurrency: 'ETH', quoteCurrency: 'USD', maxLeverage: 10 },
+        { protocol: 'Drift Trade', chain: 'Solana', pair: 'SOL-USD', baseCurrency: 'SOL', quoteCurrency: 'USD', maxLeverage: 10 },
+        
+        // dYdX V4
+        { protocol: 'dYdX V4', chain: 'dYdX', pair: 'BTC-USD', baseCurrency: 'BTC', quoteCurrency: 'USD', maxLeverage: 20 },
+        { protocol: 'dYdX V4', chain: 'dYdX', pair: 'ETH-USD', baseCurrency: 'ETH', quoteCurrency: 'USD', maxLeverage: 20 },
+        
+        // Orderly Perps
+        { protocol: 'Orderly Perps', chain: 'Ethereum', pair: 'BTC-USDC', baseCurrency: 'BTC', quoteCurrency: 'USDC', maxLeverage: 25 },
+        { protocol: 'Orderly Perps', chain: 'Ethereum', pair: 'ETH-USDC', baseCurrency: 'ETH', quoteCurrency: 'USDC', maxLeverage: 25 },
+      ];
+
+      knownContracts.forEach(contract => {
+        allContracts.push({
+          ...contract,
+          volume24h: 0,
+          isEstimated: true,
+          category: 'Perpetual',
+          logo: `https://defillama.com/icons/protocols/${contract.protocol.toLowerCase().replace(/\s+/g, '-')}.jpg`
+        });
+      });
+
+      return {
+        contracts: allContracts,
+        total: allContracts.length,
+        lastUpdated: new Date().toISOString()
+      };
+      
+    } catch (error) {
+      console.error('Error fetching individual perpetual contracts:', error);
+      return { contracts: [], total: 0 };
+    }
+  }
 }
 
 export const defiLlamaAPI = new DefiLlamaAPI();
@@ -247,4 +494,40 @@ export const CHAIN_DISPLAY_NAMES: Record<string, string> = {
   polygon: 'Polygon',
   solana: 'Solana',
   sui: 'Sui'
+};
+
+// Major DeFi and chain tokens to track
+export const TRACKED_TOKENS = [
+  // Chain native tokens
+  { id: 'coingecko:ethereum', symbol: 'ETH', name: 'Ethereum', category: 'Layer 1' },
+  { id: 'coingecko:solana', symbol: 'SOL', name: 'Solana', category: 'Layer 1' },
+  { id: 'coingecko:matic-network', symbol: 'MATIC', name: 'Polygon', category: 'Layer 2' },
+  { id: 'coingecko:sui', symbol: 'SUI', name: 'Sui', category: 'Layer 1' },
+  
+  // Major stablecoins
+  { id: 'ethereum:0x6B175474E89094C44Da98b954EedeAC495271d0F', symbol: 'DAI', name: 'Dai', category: 'Stablecoin' },
+  { id: 'ethereum:0xA0b86a33E6417c3c8C2bE44B9bC2C65B6F7F4a6b', symbol: 'USDC', name: 'USD Coin', category: 'Stablecoin' },
+  { id: 'ethereum:0xdAC17F958D2ee523a2206206994597C13D831ec7', symbol: 'USDT', name: 'Tether', category: 'Stablecoin' },
+  
+  // Top DeFi protocol tokens
+  { id: 'ethereum:0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9', symbol: 'AAVE', name: 'Aave', category: 'Lending' },
+  { id: 'ethereum:0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', symbol: 'UNI', name: 'Uniswap', category: 'DEX' },
+  { id: 'ethereum:0x6b3595068778dd592e39a122f4f5a5cf09c90fe2', symbol: 'SUSHI', name: 'SushiSwap', category: 'DEX' },
+  { id: 'ethereum:0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2', symbol: 'MKR', name: 'Maker', category: 'DeFi' },
+  { id: 'ethereum:0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72', symbol: 'ENS', name: 'Ethereum Name Service', category: 'Utility' },
+  { id: 'coingecko:chainlink', symbol: 'LINK', name: 'Chainlink', category: 'Oracle' },
+  { id: 'coingecko:wrapped-bitcoin', symbol: 'WBTC', name: 'Wrapped Bitcoin', category: 'Asset' },
+];
+
+// Token display configuration
+export const TOKEN_DISPLAY_CONFIG = {
+  'Layer 1': { color: 'bg-blue-100 text-blue-800', icon: '⛓️' },
+  'Layer 2': { color: 'bg-purple-100 text-purple-800', icon: '🔗' },
+  'DEX': { color: 'bg-green-100 text-green-800', icon: '🔄' },
+  'Lending': { color: 'bg-orange-100 text-orange-800', icon: '🏦' },
+  'Stablecoin': { color: 'bg-gray-100 text-gray-800', icon: '💵' },
+  'DeFi': { color: 'bg-indigo-100 text-indigo-800', icon: '📊' },
+  'Utility': { color: 'bg-pink-100 text-pink-800', icon: '🛠️' },
+  'Oracle': { color: 'bg-yellow-100 text-yellow-800', icon: '🔮' },
+  'Asset': { color: 'bg-red-100 text-red-800', icon: '💎' }
 };
