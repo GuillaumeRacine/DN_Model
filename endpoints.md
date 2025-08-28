@@ -4,7 +4,7 @@ This comprehensive guide documents all API endpoints, data sources, and integrat
 
 ---
 
-## =Ë Overview
+## =ï¿½ Overview
 
 The DN_Model dashboard integrates data from **6 primary chains** and **15+ protocols** through a combination of:
 - **Direct API calls** for real-time market data
@@ -43,7 +43,7 @@ The DN_Model dashboard integrates data from **6 primary chains** and **15+ proto
   - Pool information and fee tiers
   - Position token amounts (amount0, amount1)
 
-#### **¡ Raydium CLMM**
+#### **ï¿½ Raydium CLMM**
 - **Protocol**: Raydium (Concentrated Liquidity Market Maker)
 - **SDK**: `@raydium-io/raydium-sdk-v2`
 - **Data Source**: NFT-based position discovery via Helius DAS API
@@ -77,7 +77,7 @@ The DN_Model dashboard integrates data from **6 primary chains** and **15+ proto
 - **Data Provided**:
   - Concentrated liquidity positions with perfect accuracy
   - Tick-to-price conversion using TickMath.tickIndexToPrice()
-  - Position ranges: tick_lower_index ’ tick_upper_index
+  - Position ranges: tick_lower_index ï¿½ tick_upper_index
   - Liquidity amounts and current status
 - **Reference**: `docs/CETUS_INTEGRATION.md` for implementation details
 
@@ -117,11 +117,11 @@ The DN_Model dashboard integrates data from **6 primary chains** and **15+ proto
 
 ---
 
-## =° Market Data & Pool Information
+## =ï¿½ Market Data & Pool Information
 
-### **=Ê Primary Market Data Provider**
+### **=ï¿½ Primary Market Data Provider**
 
-#### **>™ DeFiLlama (Pro API)**
+#### **>ï¿½ DeFiLlama (Pro API)**
 - **Service**: DeFiLlama Pro
 - **Endpoint**: `https://pro-api.llama.fi/${DEFILLAMA_API_KEY}`
 - **Environment Variable**: `DEFILLAMA_API_KEY`
@@ -147,9 +147,9 @@ The DN_Model dashboard integrates data from **6 primary chains** and **15+ proto
 
 ---
 
-## <× Implementation Architecture
+## <ï¿½ Implementation Architecture
 
-### **=ñ Application API Routes**
+### **=ï¿½ Application API Routes**
 
 #### **Health Monitoring**: `/api/health`
 - **Purpose**: Monitor all external API endpoints
@@ -231,7 +231,7 @@ CETUS_POSITION_2=0x8e58a0cc8ebd5443a23bcf11955855636f5e0e9e88c5a216b838db0c23383
 
 ---
 
-## >ê Testing & Verification
+## >ï¿½ Testing & Verification
 
 ### **API Endpoint Testing Script**
 - **File**: `scripts/test-api-endpoints.js`
@@ -250,7 +250,7 @@ CETUS_POSITION_2=0x8e58a0cc8ebd5443a23bcf11955855636f5e0e9e88c5a216b838db0c23383
 
 ---
 
-## =Ê Data Flow & Processing
+## =ï¿½ Data Flow & Processing
 
 ### **Position Data Pipeline**
 1. **Discovery**: Wallet scanning across all chains
@@ -274,9 +274,9 @@ CETUS_POSITION_2=0x8e58a0cc8ebd5443a23bcf11955855636f5e0e9e88c5a216b838db0c23383
 ## = Fallback & Reliability Systems
 
 ### **API Fallback Hierarchy**
-1. **DeFiLlama Pro** ’ **CoinGecko** ’ **Cached Data**
-2. **Helius RPC** ’ **Public Solana RPC** (if configured)
-3. **Zerion API** ’ **Direct RPC calls** ’ **Cached Positions**
+1. **DeFiLlama Pro** ï¿½ **CoinGecko** ï¿½ **Cached Data**
+2. **Helius RPC** ï¿½ **Public Solana RPC** (if configured)
+3. **Zerion API** ï¿½ **Direct RPC calls** ï¿½ **Cached Positions**
 
 ### **Error Handling Strategy**
 - **Graceful degradation** for non-critical failures
@@ -286,7 +286,7 @@ CETUS_POSITION_2=0x8e58a0cc8ebd5443a23bcf11955855636f5e0e9e88c5a216b838db0c23383
 
 ---
 
-## =€ Performance Optimizations
+## =ï¿½ Performance Optimizations
 
 ### **Caching Strategy**
 - **60-minute TTL** for all market data
@@ -302,7 +302,7 @@ CETUS_POSITION_2=0x8e58a0cc8ebd5443a23bcf11955855636f5e0e9e88c5a216b838db0c23383
 
 ---
 
-## =Ý Usage Instructions
+## =ï¿½ Usage Instructions
 
 ### **To Replicate This Setup:**
 
@@ -337,7 +337,7 @@ CETUS_POSITION_2=0x8e58a0cc8ebd5443a23bcf11955855636f5e0e9e88c5a216b838db0c23383
 
 ---
 
-## <¯ Critical Implementation Notes
+## <ï¿½ Critical Implementation Notes
 
 ### **Mathematical Accuracy**
 - All calculations must reference `math.md` formulas
@@ -358,9 +358,9 @@ CETUS_POSITION_2=0x8e58a0cc8ebd5443a23bcf11955855636f5e0e9e88c5a216b838db0c23383
 
 ---
 
-**  Important**: This document must be kept up-to-date with any API changes, new protocol integrations, or endpoint modifications. Always test endpoint connectivity before deploying changes.
+**ï¿½ Important**: This document must be kept up-to-date with any API changes, new protocol integrations, or endpoint modifications. Always test endpoint connectivity before deploying changes.
 
-**=Ú Related Documentation**:
+**=ï¿½ Related Documentation**:
 - `math.md` - Mathematical formulas and theory
 - `docs/CETUS_INTEGRATION.md` - SUI CETUS implementation details
 - `README.md` - User setup and installation guide
