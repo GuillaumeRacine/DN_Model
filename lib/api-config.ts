@@ -42,18 +42,6 @@ export const API_CONFIG = {
     }
   },
 
-  // ✅ Working - Blockchain analytics
-  DUNE: {
-    name: 'Dune Analytics',
-    url: 'https://api.dune.com/api/v1',
-    key: process.env.DUNE_API_KEY,
-    headers: { 'X-Dune-API-Key': process.env.DUNE_API_KEY || '' },
-    status: 'working' as const,
-    endpoints: {
-      query: '/query/{query_id}/results',
-      execute: '/query/{query_id}/execute'
-    }
-  },
 
   // ✅ Working - Solana RPC
   HELIUS: {
@@ -259,10 +247,10 @@ export class APIHealthMonitor {
     const results = { working: [], degraded: [], failing: [] } as any;
     
     for (const [key, config] of Object.entries(API_CONFIG)) {
-      const status = config.status || 'unknown';
-      if (status === 'working') results.working.push(config.name);
-      else if (status === 'degraded') results.degraded.push(config.name);
-      else if (status === 'failing') results.failing.push(config.name);
+      const status = (config as any).status || 'unknown';
+      if (status === 'working') results.working.push((config as any).name);
+      else if (status === 'degraded') results.degraded.push((config as any).name);
+      else if (status === 'failing') results.failing.push((config as any).name);
     }
     
     return results;
@@ -271,7 +259,7 @@ export class APIHealthMonitor {
   getHealthSummary() {
     return {
       timestamp: new Date().toISOString(),
-      workingAPIs: ['DeFiLlama', 'Dune Analytics', 'Helius RPC', 'Zerion API', 'CoinGecko'],
+      workingAPIs: ['DeFiLlama', 'Helius RPC', 'Zerion API', 'CoinGecko'],
       degradedAPIs: ['CoinStats (using CoinGecko fallback)'],
       failingAPIs: ['Solscan (using Helius fallback)'],
       recommendations: [

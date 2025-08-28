@@ -194,27 +194,28 @@ export class UniswapV3PositionTracker {
     const sqrtRatioA = this.getSqrtRatioAtTick(tickLower);
     const sqrtRatioB = this.getSqrtRatioAtTick(tickUpper);
 
-    let amount0 = 0n;
-    let amount1 = 0n;
+    let amount0 = BigInt(0);
+    let amount1 = BigInt(0);
 
     if (sqrtPriceX96 <= sqrtRatioA) {
       // Current price is below range
       amount0 = this.getAmount0Delta(sqrtRatioA, sqrtRatioB, liquidity, true);
-      amount1 = 0n;
+      amount1 = BigInt(0);
     } else if (sqrtPriceX96 < sqrtRatioB) {
       // Current price is inside range
       amount0 = this.getAmount0Delta(sqrtPriceX96, sqrtRatioB, liquidity, true);
       amount1 = this.getAmount1Delta(sqrtRatioA, sqrtPriceX96, liquidity, true);
     } else {
       // Current price is above range
-      amount0 = 0n;
+      amount0 = BigInt(0);
       amount1 = this.getAmount1Delta(sqrtRatioA, sqrtRatioB, liquidity, true);
     }
 
     // Convert to decimal strings (simplified - needs proper decimal handling)
+    const divisor = BigInt('1000000000000'); // 10^12
     return {
-      amount0: (amount0 / 10n**12n).toString(), // Rough conversion
-      amount1: (amount1 / 10n**12n).toString(), // Rough conversion
+      amount0: (amount0 / divisor).toString(), // Rough conversion
+      amount1: (amount1 / divisor).toString(), // Rough conversion
     };
   }
 
@@ -231,7 +232,7 @@ export class UniswapV3PositionTracker {
       [sqrtRatioAX96, sqrtRatioBX96] = [sqrtRatioBX96, sqrtRatioAX96];
     }
 
-    const numerator1 = liquidity << 96n;
+    const numerator1 = liquidity << BigInt(96);
     const numerator2 = sqrtRatioBX96 - sqrtRatioAX96;
 
     return (numerator1 * numerator2) / sqrtRatioBX96 / sqrtRatioAX96;
@@ -250,7 +251,7 @@ export class UniswapV3PositionTracker {
       [sqrtRatioAX96, sqrtRatioBX96] = [sqrtRatioBX96, sqrtRatioAX96];
     }
 
-    return (liquidity * (sqrtRatioBX96 - sqrtRatioAX96)) >> 96n;
+    return (liquidity * (sqrtRatioBX96 - sqrtRatioAX96)) >> BigInt(96);
   }
 
   /**
@@ -260,10 +261,10 @@ export class UniswapV3PositionTracker {
     const absTick = tick < 0 ? -tick : tick;
     
     let ratio = (absTick & 0x1) !== 0
-      ? 0xfffcb933bd6fad37aa2d162d1a594001n
-      : 0x100000000000000000000000000000000n;
+      ? BigInt('0xfffcb933bd6fad37aa2d162d1a594001')
+      : BigInt('0x100000000000000000000000000000000');
 
-    if ((absTick & 0x2) !== 0) ratio = (ratio * 0xfff97272373d413259a46990580e213an) >> 128n;
+    if ((absTick & 0x2) !== 0) ratio = (ratio * BigInt('0xfff97272373d413259a46990580e213a')) >> BigInt(128);
     if ((absTick & 0x4) !== 0) ratio = (ratio * 0xfff2e50f5f656932ef12357cf3c7fdccn) >> 128n;
     if ((absTick & 0x8) !== 0) ratio = (ratio * 0xffe5caca7e10e4e61c3624eaa0941cd0n) >> 128n;
     if ((absTick & 0x10) !== 0) ratio = (ratio * 0xffcb9843d60f6159c9db58835c926644n) >> 128n;

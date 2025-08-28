@@ -61,15 +61,6 @@ export default function EndpointsTab() {
           lastCheck: new Date(),
         },
         {
-          name: 'Dune Analytics',
-          type: 'Primary', 
-          status: 'working',
-          responseTime: '<100ms',
-          dataQuality: 'excellent',
-          coverage: 'On-chain data, GMX markets',
-          lastCheck: new Date(),
-        },
-        {
           name: 'Helius RPC',
           type: 'Primary',
           status: 'working',
@@ -290,7 +281,7 @@ export default function EndpointsTab() {
             </table>
           </div>
           <div className="px-2 py-2 bg-gray-50 dark:bg-gray-800 text-xs text-gray-500 dark:text-gray-400">
-            <span className="text-green-600 font-medium">4 Primary APIs Working</span> | 
+            <span className="text-green-600 font-medium">3 Primary APIs Working</span> | 
             <span className="text-orange-600 font-medium"> 1 Fallback Active</span> | 
             <span className="text-red-600 font-medium"> 2 APIs with Issues</span>
           </div>

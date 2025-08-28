@@ -450,36 +450,6 @@ class DefiLlamaAPI {
         console.warn('Hyperliquid API error:', error);
       }
 
-      // 2. Get GMX V2 Arbitrum perpetual contracts
-      try {
-        const gmxResponse = await fetch('https://arbitrum-api.gmxinfra.io/prices/tickers');
-        const gmxData = await gmxResponse.json();
-        
-        if (Array.isArray(gmxData)) {
-          // Filter for major tokens that likely have perpetuals
-          const majorTokens = gmxData.filter((token: any) => 
-            ['BTC', 'ETH', 'ARB', 'AVAX', 'LINK', 'UNI', 'LTC', 'DOGE', 'SOL', 'XRP', 'ADA', 'MATIC'].includes(token.tokenSymbol)
-          );
-          
-          majorTokens.forEach((token: any) => {
-            allContracts.push({
-              protocol: 'GMX V2',
-              chain: 'Arbitrum',
-              pair: `${token.tokenSymbol}-USD`,
-              baseCurrency: token.tokenSymbol,
-              quoteCurrency: 'USD',
-              maxLeverage: 50,
-              volume24h: 0, // Would need additional API calls
-              price: parseFloat(token.minPrice) / 1e30,
-              lastUpdate: new Date(token.updatedAt),
-              category: 'Perpetual',
-              logo: 'https://gmx.io/favicon.ico'
-            });
-          });
-        }
-      } catch (error) {
-        console.warn('GMX API error:', error);
-      }
 
       // 3. Add known major contracts from other protocols (estimated data)
       const knownContracts = [

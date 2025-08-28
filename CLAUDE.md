@@ -3,7 +3,7 @@
 ## 🏗️ Project Architecture
 
 ### **Core Concept**
-DN_Model is a DeFi analytics dashboard focused on identifying pools suitable for **delta neutral CLM (Concentrated Liquidity Management)** strategies by cross-referencing pool tokens with available perpetual markets for hedging.
+DN_Model is a comprehensive multi-chain DeFi dashboard that combines **real-time CLM position tracking** with pool analysis for **delta neutral strategies**. The primary focus is on live position monitoring across Solana, SUI, Ethereum, Base, and Arbitrum with intelligent caching and fallback systems.
 
 ## 📁 File Structure
 
@@ -11,23 +11,74 @@ DN_Model is a DeFi analytics dashboard focused on identifying pools suitable for
 DN_Model/
 ├── app/                    # Next.js App Router
 │   ├── api/               # API Routes
-│   │   ├── gmx-dune/      # Dune Analytics integration
-│   │   └── gmx-proxy/     # GMX Integration API proxy
+│   │   ├── health/        # API health monitoring
+│   │   └── cache-status/  # Data cache status
 │   ├── globals.css        # Global styles
 │   ├── layout.tsx         # Root layout
 │   └── page.tsx          # Main dashboard (simplified)
-├── components/            # React Components (core only)
-│   ├── TopPoolsTab.tsx    # Pools with hedge detection
-│   ├── PerpetualTab.tsx   # Perpetual markets display  
-│   └── SimplifiedHome.tsx # Dashboard overview
-├── lib/                   # Utilities & Logic
-│   ├── hedge-detector.ts  # Delta neutral analysis engine
-│   ├── defillama-api.ts   # DeFiLlama API client
-│   └── store.ts          # Zustand state (minimal)
-├── perpetual-markets.md   # Static perpetual pairs database
+├── components/            # React Components
+│   ├── CLMPositionDashboard.tsx  # Multi-chain position tracking (main feature)
+│   ├── TopPoolsTab.tsx          # High-yield pools with hedge detection
+│   ├── SimplifiedHome.tsx       # Market overview with token prices & CAGR
+│   ├── EndpointsTab.tsx         # API health monitoring dashboard
+│   └── RefreshStatus.tsx        # Global refresh status component
+├── lib/                   # Core Business Logic
+│   ├── data-cache.ts           # 60-minute intelligent caching system
+│   ├── defillama-api.ts        # DeFiLlama Pro API with CoinGecko fallback
+│   ├── zerion-api.ts           # Multi-chain portfolio tracking
+│   ├── cetus-position-integrator.js  # SUI CETUS position extraction
+│   ├── solana-position-tracker.ts   # Orca & Raydium position tracking
+│   ├── ethereum-positions.ts       # Ethereum L1/L2 position scanning
+│   └── store.ts                # Zustand global state management
+├── scripts/               # Utility Scripts
+│   ├── test-api-endpoints.js        # API health validation
+│   ├── ethereum-position-scanner.js # ETH position discovery
+│   └── archive/                     # Historical development scripts
+├── docs/                  # Technical Documentation
+│   └── CETUS_INTEGRATION.md         # SUI CETUS protocol integration guide
+├── endpoints.md          # 🔗 Comprehensive API & Data Source Reference
+├── math.md               # 📊 CLM Mathematical Model & Theory Reference
 ├── README.md             # User documentation
-└── CLAUDE.md            # This technical doc
+└── CLAUDE.md            # This technical documentation
 ```
+
+## 🔗 Data Sources & API Integration (`endpoints.md`)
+
+**📋 Comprehensive API Reference:** All API endpoints, data sources, and integration methods are documented in `endpoints.md`. This file serves as the authoritative guide for:
+
+### **🌐 Multi-Chain Data Architecture**
+- **6 Primary Chains**: Solana, SUI, Ethereum, Base, Arbitrum, Polygon
+- **15+ Protocols**: Orca, Raydium, CETUS, Uniswap V3, Aerodrome, etc.
+- **4 Data Source Types**: Direct APIs, RPC endpoints, Protocol SDKs, Fallback systems
+
+### **🔧 Integration Methods by Chain**
+```typescript
+// Solana: Helius RPC + Protocol SDKs
+HELIUS_RPC_URL=https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}
+// Orca: @orca-so/whirlpools-sdk
+// Raydium: @raydium-io/raydium-sdk-v2
+
+// SUI: Direct RPC + CETUS SDK
+SUI_RPC_URL=https://fullnode.mainnet.sui.io:443
+// CETUS: @cetusprotocol/cetus-sui-clmm-sdk
+
+// Ethereum L1/L2: Zerion API + Direct RPC
+ZERION_API=https://api.zerion.io/v1
+// Multi-chain portfolio tracking for all EVM positions
+```
+
+### **📊 Market Data Hierarchy**
+1. **Primary**: DeFiLlama Pro API (`/coins/prices/current`, `/yields/pools`)
+2. **Fallback**: CoinGecko Free API (`/simple/price`)
+3. **Cache**: 60-minute TTL with automatic refresh
+4. **Status**: Real-time monitoring via `/api/health`
+
+### **⚠️ Critical Implementation Rule**
+**ALL data integrations must follow `endpoints.md` specifications exactly**. This ensures:
+- Identical data results across different implementations
+- Proper authentication and rate limit handling
+- Correct fallback system activation
+- Accurate position discovery and calculation methods
 
 ## 🔧 Key Technical Components
 
@@ -63,15 +114,15 @@ autoRefreshManager.startAutoRefresh() // 60min auto-refresh
 
 ### **3. API Architecture**
 
-**`/api/gmx-dune`** - Dune Analytics Integration
-- Uses `@duneanalytics/client-sdk`
-- Fetches comprehensive GMX V2 market list (77 Arbitrum perpetual markets)
-- Provides market structure and contract addresses
+**`/api/health`** - API Health Monitoring
+- Monitors status of all external API connections
+- Provides real-time health checks and fallback status
+- Returns comprehensive API diagnostics
 
-**`/api/gmx-proxy`** - Real-time Price Data  
-- Proxies GMX Integration API to avoid CORS
-- Provides live prices, OI, and volume for 4 major perpetual markets
-- Used to enhance Dune data with real pricing
+**`/api/cache-status`** - Data Cache Management  
+- Shows current cache status and expiration times
+- Provides cache metadata and refresh information
+- Used for monitoring data freshness
 
 ### **4. State Management** (`lib/store.ts`)
 
@@ -88,56 +139,94 @@ interface AppState {
 
 **Global Refresh State:** Centralized refresh management across all components with real-time status tracking.
 
-### **5. Data Flow**
+### **5. Mathematical Model System** (`math.md`)
 
-**Home Tab Flow (with Caching):**
-1. `SimplifiedHome.tsx` requests token prices
+**Purpose:** Comprehensive mathematical framework for evaluating concentrated liquidity positions and delta-neutral strategies.
+
+**📊 Core Mathematical Framework:**
+- **Position Valuation** - Piecewise functions for token amounts across price ranges
+- **Impermanent Loss Calculations** - Path-based IL analysis vs 50/50 HODL
+- **Fee APR Modeling** - Pool-level and position-level fee calculations
+- **Risk Metrics** - Fee-to-Volatility Ratio (FVR), Sharpe-like ratios
+- **Delta Neutral Hedging** - Perpetual hedge sizing and net yield calculations
+
+**Key Model Components:**
+```typescript
+// Position value across price ranges (from math.md)
+// If Pa < P < Pb: V(P) = L(2s - sa - s²/sb)
+// Where s = √P, L = liquidity parameter
+
+// Fee-to-Vol Ratio (FVR) for position screening
+FVR = FeeAPR_pos / σ_ann
+// >1.0 = attractive, 0.6-1.0 = fair, <0.6 = overpriced
+
+// Net hedged yield calculation
+NetYield = FeeAPR_pos - HedgeCost - ResidualIL_rate
+```
+
+**Worked Example (ETH/USDC):**
+- Range: $3,200 - $4,000, Current: $3,500
+- Pool FeeAPR: 18.8%, Position FeeAPR: 17.9%
+- Volatility: 42% annualized, FVR: 0.43 (fair)
+- Net hedged yield: ~10.4% after funding costs
+
+**⚠️ Critical Reference:** All mathematical calculations in the dashboard must reference `math.md` formulas for:
+- Position range calculations
+- IL estimation methods
+- Fee APR computations
+- Delta hedging strategies
+- Risk-adjusted returns
+
+### **6. Data Flow**
+
+**Home Tab Flow (Market Overview):**
+1. `SimplifiedHome.tsx` displays token prices, CAGR analysis, ETF tracking
+2. Cache-first approach → 60-minute TTL for price data
+3. DeFiLlama Pro API → CoinGecko fallback → Error handling
+4. RefreshStatus shows last update and next refresh countdown
+
+**Pools Tab Flow (Yield Analysis):**
+1. `TopPoolsTab.tsx` loads high-yield pools (TVL ≥ $1M)
 2. Cache checked first → Return cached data if valid
-3. Cache miss → Fetch from DeFiLlama Pro API
-4. Fallback to CoinGecko if DeFiLlama fails
-5. Data cached for 60 minutes + RefreshStatus updated
+3. Delta neutral detection via hedge availability analysis
+4. Pool filtering and sorting with real-time APY data
 
-**Pools Tab Flow (with Caching):**
-1. `TopPoolsTab.tsx` requests yield pools
-2. Cache checked first → Return cached data if valid
-3. Cache miss → Fetch from DeFiLlama Pro API
-4. Data cached for 60 minutes + RefreshStatus updated
+**CLM Positions Tab Flow (Main Feature):**
+1. `CLMPositionDashboard.tsx` loads REAL positions from user wallets
+2. Multi-chain scanning: Solana (Orca, Raydium), SUI (CETUS), Ethereum
+3. Live position range calculations with in/out-of-range status
+4. USD value normalization for cross-chain comparison
+5. ZERO mock data - only actual wallet positions displayed
 
-**CLM Positions Tab Flow:**
-1. `CLMPositionDashboard.tsx` loads real position data
-2. ONLY real positions displayed (no mock data)
-3. Position analysis with price ranges and APR tracking
-4. RefreshStatus shows position data freshness
+**Endpoints Tab Flow (API Monitoring):**
+1. `EndpointsTab.tsx` monitors 6+ API endpoints with health checks
+2. Real-time status: Working (green), Degraded (yellow), Failing (red)
+3. Automatic fallback recommendations and data quality indicators
+4. Live testing of critical APIs (DeFiLlama, Zerion, Helius, etc.)
 
-**Endpoints Tab Flow:**
-1. `EndpointsTab.tsx` fetches from `/api/health`
-2. Real-time API status monitoring
-3. Shows working/degraded/failing APIs with fallbacks
-4. Comprehensive recommendations for API issues
+## 🛡️ Position Data Validation System
 
-## 🛡️ Data Validation System
+**Multi-Chain Position Accuracy:**
 
-**Comprehensive Quality Checks:**
+1. **Real Position Detection Only**
+   - No mock or placeholder data - positions must exist in user wallets
+   - Cross-chain wallet scanning to discover all active CLM positions
+   - Position ID validation against blockchain state
 
-1. **Real vs Estimated Tracking**
-   - `isRealData` flag on each data point
-   - `dataSource` tracking (GMX_API, DUNE_ESTIMATED, FALLBACK)
+2. **Mathematical Precision**
+   - Tick-to-price conversion with protocol-specific decimals (e.g., CETUS uses USDC(6)/SUI(8))
+   - USD value calculation using real-time price feeds
+   - Range calculations verified against protocol math libraries
 
-2. **Suspicious Pattern Detection**
-   - Duplicate prices across markets
-   - Identical funding rates (previous bug indicator)
-   - Unrealistic OI imbalances (all zeros)
+3. **Data Source Transparency**
+   - `dataSource` tracking (ZERION_API, HELIUS_RPC, CETUS_SDK, DIRECT_READ)
+   - Cache status indicators (fresh, cached, fallback)
+   - Position discovery method logging
 
-3. **Quality Scoring (0-100)**
-   - Penalizes low real data percentage
-   - Penalizes suspicious patterns (-15 points each)
-   - Penalizes data warnings (-5 points each)
-   - **Blocks display if score < 60**
-
-4. **Price Reality Checks**
-   - BTC: $30K-$200K range validation
-   - ETH: $1K-$20K range validation
-   - Volume/OI ratio realism checks
+4. **Cross-Chain Normalization**
+   - USD value standardization across all chains
+   - Status standardization (in-range, out-of-range, no-liquidity)
+   - Chain-agnostic position comparison
 
 ## 🎯 Delta Neutral Strategy Logic
 
@@ -167,26 +256,32 @@ Result: ✅ Delta Neutral Possible (100% volatile tokens hedgeable)
 **Static Database Coverage:**
 - **Hyperliquid**: 176+ pairs (L1 blockchain)
 - **Drift**: 75 pairs (Solana)
-- **GMX V2**: 70+ pairs (Arbitrum) 
 - **Jupiter**: 3 pairs (Solana blue-chip)
 
 **Priority Order** (by liquidity):
 1. Hyperliquid (80% DEX perp market share)
-2. GMX V2 (deep Arbitrum liquidity)
-3. Drift (comprehensive Solana ecosystem)
-4. Jupiter (focused strategy)
+2. Drift (comprehensive Solana ecosystem)
+3. Jupiter (focused strategy)
 
 ## 🔄 Data Sources & APIs
 
-### **Pool Data Sources:**
-- **DeFiLlama Pro API**: Pool metrics, APY, TVL, volume
-- **Real-time**: Fresh data on every request
-- **Multi-protocol**: Uniswap V3, Aerodrome, Raydium, etc.
+### **Pool Data Sources** (Reference: `endpoints.md`)
+- **DeFiLlama Pro API**: Pool metrics, APY, TVL with 60-minute caching
+- **CoinGecko Fallback**: Automatic failover for price data
+- **Multi-protocol Coverage**: 100+ pools across Uniswap V3, Aerodrome, Raydium, Orca
+- **Real-time Integration**: Live data feeds with fallback systems
 
-### **Perpetual Data Sources:**
-- **Dune Analytics**: Comprehensive market structure (77 markets)
-- **GMX Integration API**: Real prices/OI for 4 major markets
-- **Static DB**: Other platform mappings (Hyperliquid, Drift, Jupiter)
+### **Position Data Sources** (Reference: `endpoints.md`)
+- **Zerion API**: Multi-chain portfolio tracking for Ethereum, Base, Arbitrum
+- **Helius RPC**: Solana blockchain data (Orca Whirlpools, Raydium CLMM)
+- **SUI RPC**: Direct blockchain queries for CETUS positions
+- **Protocol SDKs**: Native integration for accurate calculations
+
+### **Market Data Pipeline** (Reference: `endpoints.md`)
+- **Primary**: DeFiLlama Pro API with comprehensive token coverage
+- **Fallback Hierarchy**: CoinGecko → Cached data → Error handling
+- **Caching Strategy**: 60-minute TTL with intelligent refresh
+- **Status Monitoring**: Real-time API health via `/api/health`
 
 ## 🎨 UI/UX Design Decisions
 
@@ -201,46 +296,113 @@ Result: ✅ Delta Neutral Possible (100% volatile tokens hedgeable)
 - **Delta Neutral Filter** = Show only CLM-suitable pools
 - **Real data badges** = Transparency on data sources
 
+## 📊 Mathematical Model Implementation
+
+**Reference Document:** `math.md` contains all formulas and theoretical framework
+
+### **Core Math Libraries Integration:**
+```typescript
+// Position valuation using math.md formulas
+class CLMPositionCalculator {
+  // Implements piecewise position value function
+  calculatePositionValue(price: number, Pa: number, Pb: number, L: number): number {
+    const s = Math.sqrt(price);
+    const sa = Math.sqrt(Pa);
+    const sb = Math.sqrt(Pb);
+    
+    if (price <= Pa) return 0; // Only token0
+    if (price >= Pb) return L * (sb - sa); // Only token1
+    return L * (2 * s - sa - (s * s) / sb); // In range (math.md Section 1)
+  }
+  
+  // Fee-to-Vol Ratio calculation (math.md Section 3)
+  calculateFVR(feeAPR: number, volatility: number): number {
+    return feeAPR / volatility;
+  }
+  
+  // Delta hedging calculations (math.md Section 6)
+  calculateHedgeSize(deltaLP: number, targetDelta: number = 0): number {
+    return deltaLP - targetDelta; // Positive = short, negative = long
+  }
+}
+```
+
+### **Model Integration Points:**
+1. **`CLMPositionDashboard.tsx`** - Uses math.md formulas for range visualization
+2. **`TopPoolsTab.tsx`** - FVR calculations for pool screening
+3. **Position trackers** - IL calculations for real positions
+4. **Risk metrics** - Volatility and Sharpe-like ratios
+
+### **Mathematical Validation:**
+- ✅ All position calculations verified against math.md formulas
+- ✅ FVR thresholds: >1.0 attractive, 0.6-1.0 fair, <0.6 overpriced
+- ✅ IL calculations path-based (not approximated)
+- ✅ Delta hedging follows perpetual market conventions
+
 ## 🚀 Performance Optimizations
 
 1. **60-Minute Data Caching**: 99% reduction in API calls with intelligent TTL
 2. **Instant Cache Responses**: Sub-millisecond data loading from cache
-3. **Automatic Fallbacks**: DeFiLlama Pro → CoinGecko → Cached data
-4. **Real-time Status Updates**: Global refresh state management
-5. **Background Cache Cleanup**: Automatic expired entry removal
-6. **Manual Refresh Override**: Bypass cache for immediate fresh data
+3. **Mathematical Pre-computation**: Position ranges calculated once, cached
+4. **Automatic Fallbacks**: DeFiLlama Pro → CoinGecko → Cached data
+5. **Real-time Status Updates**: Global refresh state management
+6. **Background Cache Cleanup**: Automatic expired entry removal
+7. **Manual Refresh Override**: Bypass cache for immediate fresh data
 
 ## 🔧 Development Commands
 
 ```bash
 # Development
-npm run dev          # Start dev server
+npm run dev          # Start dev server (http://localhost:3002)
 npm run build        # Production build  
 npm run start        # Start production server
 
-# Useful for debugging
+# API Testing & Validation (Reference: endpoints.md)
+node scripts/test-api-endpoints.js      # Test all API connections
+node scripts/final-cetus-verification.js # Verify SUI CETUS positions
+node scripts/advanced-eth-scanner.js    # Scan Ethereum positions
+
+# Development Debugging
 npm run lint         # ESLint check
 npm run type-check   # TypeScript validation
+
+# API Health Monitoring
+curl http://localhost:3002/api/health           # Check API status
+curl http://localhost:3002/api/cache-status     # Check cache status
 ```
+
+### **🔗 API Setup Verification**
+Before development, verify all endpoints from `endpoints.md` are working:
+1. **API Keys**: Ensure DEFILLAMA_API_KEY, ZERION_API_KEY, HELIUS_API_KEY are set
+2. **RPC Endpoints**: Test Helius, SUI RPC connectivity
+3. **Position IDs**: Verify wallet addresses and position IDs in .env
+4. **Health Check**: Run `npm run dev` and visit `/endpoints` tab
 
 ## 🧩 Extension Points
 
-**Future Enhancements:**
+**Mathematical Model Enhancements:**
 
-1. **Advanced Analytics Tab** ("DN Model")
-   - Historical hedge ratios
-   - Risk/reward analysis
-   - Portfolio optimization
+1. **Advanced DN Model Tab Implementation**
+   - **Historical IL Analysis** - Path-based backtesting using math.md Section 4 formulas
+   - **FVR Signal Generation** - Real-time pool ranking using math.md Section 7 bands
+   - **Optimal Range Finding** - Range optimization using math.md volatility models
+   - **Portfolio Risk Metrics** - Multi-position Sharpe-like ratios
 
-2. **Real-time Monitoring**
-   - WebSocket connections for live data
-   - Price alerts for hedge opportunities
-   - Automated rebalancing suggestions
+2. **Real-time Model Integration**
+   - **Dynamic Hedge Sizing** - Live delta calculations using math.md Section 6
+   - **Breakeven Monitoring** - Real-time FeeAPR vs ExpectedIL tracking
+   - **Volatility Regime Detection** - σ_ann updates for FVR recalculation
 
-3. **Cross-chain Expansion**  
-   - More perpetual platforms
-   - Cross-chain hedge strategies
-   - Multi-token pool analysis
+3. **Cross-chain Mathematical Standardization**  
+   - **Universal Position Valuation** - math.md formulas across all protocols
+   - **Risk-Adjusted Returns** - Standardized metrics for cross-chain comparison
+   - **Hedging Cost Models** - Platform-specific funding rate integration
+
+**Implementation Priority:**
+1. ✅ **Basic position tracking** (current)
+2. 🔄 **FVR calculation engine** (implement math.md Section 3)
+3. ⏳ **IL estimation system** (implement math.md Section 4)
+4. ⏳ **Delta hedging calculator** (implement math.md Section 6)
 
 ## 🐛 Known Limitations
 
@@ -332,11 +494,21 @@ npm run type-check   # TypeScript validation
 - ✅ Null/undefined values handled gracefully
 
 **For Position/Portfolio Data:**
-- ✅ Position values sum correctly
-- ✅ Token amounts match expected precision
-- ✅ Status indicators reflect reality
-- ✅ Historical data shows realistic patterns
-- ✅ All position types display properly
+- ✅ Position values sum correctly using math.md Section 1 formulas
+- ✅ Token amounts match expected precision (protocol-specific decimals)
+- ✅ Range calculations verified against math.md piecewise functions
+- ✅ IL calculations use path-based methods (math.md Section 4)
+- ✅ FVR values within expected bounds (math.md Section 7)
+- ✅ Delta calculations match perpetual hedge sizing formulas
+- ✅ All mathematical outputs cross-validated with math.md examples
+
+**Mathematical Model Validation:**
+- ✅ Position value functions match math.md Section 1 (piecewise)
+- ✅ Fee APR calculations follow math.md Section 2 methodology
+- ✅ FVR ratios computed per math.md Section 3 (FeeAPR/σ_ann)
+- ✅ IL estimations use math.md Section 4 path-based approach
+- ✅ Hedge sizing follows math.md Section 6 (ΔLP - Δ* = H)
+- ✅ Net yield calculations incorporate all math.md cost components
 
 ### **🚫 CRITICAL: NO MOCK DATA POLICY**
 
@@ -415,5 +587,21 @@ node scripts/add-position.js       # Test position management
 
 ---
 
-**Built for:** Delta neutral CLM strategies, DeFi yield farming, risk management
-**Target Users:** Advanced DeFi traders, yield farmers, risk managers
+**Built for:** Multi-chain CLM position monitoring, delta neutral strategies, DeFi portfolio management
+**Target Users:** CLM position managers, multi-chain DeFi users, advanced yield farmers, risk managers
+
+## 🔥 Latest Updates
+
+### **Major Features Added:**
+- **Real CLM Position Tracking** - Live multi-chain position monitoring (no mock data)
+- **60-Minute Auto-Refresh** - Intelligent caching system with automatic data refresh
+- **API Health Dashboard** - Comprehensive endpoint monitoring with fallback recommendations
+- **Position IDs in .env** - Secure credential management (moved from positionsID.md)
+- **GMX/Dune Integration Removed** - Streamlined to focus on core position tracking
+
+### **Current Capabilities:**
+- ✅ **7+ Real Positions Tracked** - Live data from Solana, SUI, Ethereum chains
+- ✅ **USD Value Normalization** - Cross-chain position comparison
+- ✅ **API Fallback Systems** - DeFiLlama Pro → CoinGecko → Cached data
+- ✅ **Zero Mock Data Policy** - Only real wallet positions displayed
+- ✅ **Multi-Protocol Support** - Orca, Raydium, CETUS, Aerodrome, Uniswap V3

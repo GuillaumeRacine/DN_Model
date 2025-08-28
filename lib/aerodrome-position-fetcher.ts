@@ -234,7 +234,7 @@ class AerodromePositionFetcher {
 
   // Convert sqrtPriceX96 to price
   private sqrtPriceX96ToPrice(sqrtPriceX96: bigint, decimals0: number, decimals1: number): number {
-    const Q96 = 2n ** 96n;
+    const Q96 = BigInt('79228162514264337593543950336'); // 2^96
     const price = (Number(sqrtPriceX96) / Number(Q96)) ** 2;
     return price * Math.pow(10, decimals0 - decimals1);
   }
@@ -293,6 +293,9 @@ class AerodromePositionFetcher {
     }
     
     try {
+      if (!this.factory) {
+        throw new Error('Factory not initialized');
+      }
       const poolAddress = await this.factory.getPool(token0, token1, tickSpacing);
       return poolAddress;
     } catch (error) {
@@ -375,7 +378,7 @@ class AerodromePositionFetcher {
           } = positionData;
           
           // Skip positions with no liquidity
-          if (BigInt(liquidity) === 0n) {
+          if (BigInt(liquidity) === BigInt(0)) {
             console.log(`⏭️  Skipping position #${tokenId} - no liquidity`);
             continue;
           }

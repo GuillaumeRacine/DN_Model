@@ -5,10 +5,15 @@ export async function POST(request: NextRequest) {
     const { url } = await request.json();
     
     // Simple check for now - can be enhanced later
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
     const response = await fetch(url, {
       method: 'HEAD',
-      timeout: 5000,
+      signal: controller.signal,
     });
+    
+    clearTimeout(timeoutId);
     
     return NextResponse.json({
       ok: response.ok,

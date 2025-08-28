@@ -85,7 +85,7 @@ class DataCache {
   getAllMetadata(): Record<string, any> {
     const metadata: Record<string, any> = {};
     
-    for (const [key, cached] of this.cache.entries()) {
+    Array.from(this.cache.entries()).forEach(([key, cached]) => {
       const now = new Date();
       const age = now.getTime() - cached.timestamp.getTime();
       const isExpired = now > cached.expiresAt;
@@ -98,7 +98,7 @@ class DataCache {
         isExpired,
         timeToExpiry: Math.max(0, cached.expiresAt.getTime() - now.getTime())
       };
-    }
+    });
     
     return metadata;
   }
@@ -108,11 +108,11 @@ class DataCache {
     const now = new Date();
     const toDelete: string[] = [];
     
-    for (const [key, cached] of this.cache.entries()) {
+    Array.from(this.cache.entries()).forEach(([key, cached]) => {
       if (now > cached.expiresAt) {
         toDelete.push(key);
       }
-    }
+    });
     
     toDelete.forEach(key => {
       this.cache.delete(key);
@@ -131,11 +131,11 @@ class DataCache {
   getLatestRefreshTime(): Date | null {
     let latest: Date | null = null;
     
-    for (const [, cached] of this.cache.entries()) {
+    Array.from(this.cache.entries()).forEach(([, cached]) => {
       if (!latest || cached.timestamp > latest) {
         latest = cached.timestamp;
       }
-    }
+    });
     
     return latest;
   }

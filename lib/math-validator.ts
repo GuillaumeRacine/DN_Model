@@ -259,7 +259,7 @@ export class MathValidator {
         let calculatedTvl = 0;
         let hasValidPrices = true;
 
-        tokenMatches.forEach(match => {
+        tokenMatches.forEach((match: any) => {
           const [, amountStr, symbol] = match.match(/(\d+\.?\d*)\s*(\w+)/) || [];
           const amount = parseFloat(amountStr);
           

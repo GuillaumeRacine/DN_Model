@@ -6,7 +6,6 @@ require('dotenv').config();
 // API credentials from .env
 const API_KEYS = {
   DEFILLAMA: process.env.DEFILLAMA_API_KEY,
-  DUNE: process.env.DUNE_API_KEY,
   SOLSCAN: process.env.SOLSCAN_API_KEY,
   COINSTATS: process.env.COINSTATS_API_KEY,
   HELIUS: process.env.HELIUS_API_KEY,
@@ -74,24 +73,6 @@ async function testDeFiLlama() {
   };
 }
 
-// 2. Dune Analytics API Test
-async function testDune() {
-  const response = await axios.get('https://api.dune.com/api/v1/query/1215383/results', {
-    headers: {
-      'X-Dune-API-Key': API_KEYS.DUNE
-    },
-    timeout: 15000
-  });
-  
-  const rowCount = response.data?.result?.rows?.length || 0;
-  const executionTime = response.data?.execution_time_ms || 0;
-  
-  return {
-    success: rowCount > 0,
-    message: `${rowCount} rows retrieved in ${executionTime}ms`,
-    data: { rowCount, executionTime, sampleData: response.data?.result?.rows?.slice(0, 2) }
-  };
-}
 
 // 3. Solscan API Test
 async function testSolscan() {
@@ -182,7 +163,6 @@ async function testZerion() {
 // Run all tests
 async function runAllTests() {
   await testEndpoint('DeFiLlama API', testDeFiLlama);
-  await testEndpoint('Dune Analytics API', testDune);
   await testEndpoint('Solscan API', testSolscan);
   await testEndpoint('CoinStats API', testCoinStats);
   await testEndpoint('Helius RPC', testHelius);
