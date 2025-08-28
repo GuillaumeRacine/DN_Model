@@ -31,34 +31,37 @@ DN_Model/
 
 ## 🔧 Key Technical Components
 
-### **1. Hedge Detection Engine** (`lib/hedge-detector.ts`)
+### **1. Automatic Data Refresh System** (`lib/data-cache.ts`)
 
-**Purpose:** Identifies which pools can achieve delta neutral exposure by checking if their volatile tokens have available perpetual hedges.
+**Purpose:** Manages automatic data refresh every 60 minutes with intelligent caching to reduce API calls and improve performance.
 
-**Key Functions:**
+**Key Features:**
 ```typescript
-parsePoolSymbol(symbol: string): string[]
-// Extracts tokens from pool symbols (e.g., "ETH-USDC" → ["ETH", "USDC"])
-
-findTokenHedges(token: string): HedgeAvailability[]
-// Finds all perpetual markets available for hedging a specific token
-
-analyzePoolHedges(poolSymbol: string): PoolAnalysis
-// Comprehensive analysis of a pool's hedge potential
-
-generateHedgeSummary(poolSymbol: string): HedgeSummary
-// Simple Yes/No hedge availability for UI display
+dataCache.set(key, data, source)    // Cache data with 60min TTL
+dataCache.get(key)                  // Retrieve cached data if valid
+cacheHelpers.getTokenPrices()       // Token prices with fallback
+autoRefreshManager.startAutoRefresh() // 60min auto-refresh
 ```
 
-**Logic Flow:**
-1. Parse pool symbol → Extract individual tokens
-2. Normalize symbols (WETH→ETH, WBTC→BTC)
-3. Filter out stablecoins (don't need hedging)
-4. Check each volatile token against perpetual markets database
-5. Calculate hedge coverage percentage
-6. Determine if delta neutral is possible (all volatile tokens hedgeable)
+**Cache Flow:**
+1. API request → Check cache first
+2. Cache hit → Return cached data instantly
+3. Cache miss/expired → Fetch fresh data
+4. Store in cache with 60-minute expiration
+5. Auto-cleanup expired entries every 10 minutes
+6. Manual refresh bypasses cache entirely
 
-### **2. API Architecture**
+### **2. Global Refresh Status** (`components/RefreshStatus.tsx`)
+
+**Purpose:** Displays real-time refresh timestamps and provides manual refresh functionality across all pages.
+
+**Key Features:**
+- Shows "Last updated: X minutes ago" 
+- Countdown to next auto-refresh
+- Manual refresh button with loading states
+- Real-time clock updates every second
+
+### **3. API Architecture**
 
 **`/api/gmx-dune`** - Dune Analytics Integration
 - Uses `@duneanalytics/client-sdk`
@@ -70,31 +73,47 @@ generateHedgeSummary(poolSymbol: string): HedgeSummary
 - Provides live prices, OI, and volume for 4 major perpetual markets
 - Used to enhance Dune data with real pricing
 
-### **3. State Management** (`lib/store.ts`)
+### **4. State Management** (`lib/store.ts`)
 
-**Simplified Zustand Store:**
+**Enhanced Zustand Store with Refresh Management:**
 ```typescript
 interface AppState {
-  viewMode: 'home' | 'pools' | 'perps' | 'dn model';
-  setViewMode: (mode) => void;
+  viewMode: 'home' | 'pools' | 'dn model' | 'endpoints';
+  isRefreshing: boolean;
+  lastRefreshTime: Date | null;
+  nextRefreshTime: Date | null;
+  triggerManualRefresh: () => Promise<void>;
 }
 ```
 
-**Design Decision:** Removed complex filtering state since chain filters were removed for simplicity.
+**Global Refresh State:** Centralized refresh management across all components with real-time status tracking.
 
-### **4. Data Flow**
+### **5. Data Flow**
 
-**Pools Tab Flow:**
-1. `TopPoolsTab.tsx` fetches pools from DeFiLlama API
-2. For each pool: `generateHedgeSummary()` analyzes hedge availability  
-3. UI displays "Yes/No" hedge status + delta neutral filter
-4. User can filter to show only delta neutral pools
+**Home Tab Flow (with Caching):**
+1. `SimplifiedHome.tsx` requests token prices
+2. Cache checked first → Return cached data if valid
+3. Cache miss → Fetch from DeFiLlama Pro API
+4. Fallback to CoinGecko if DeFiLlama fails
+5. Data cached for 60 minutes + RefreshStatus updated
 
-**Perpetual Tab Flow:**
-1. `PerpetualTab.tsx` fetches from `/api/gmx-dune` (comprehensive list)
-2. Enhances with real prices from `/api/gmx-proxy` where available
-3. Data validation system checks quality before display
-4. Shows 77 markets with real/estimated data indicators
+**Pools Tab Flow (with Caching):**
+1. `TopPoolsTab.tsx` requests yield pools
+2. Cache checked first → Return cached data if valid
+3. Cache miss → Fetch from DeFiLlama Pro API
+4. Data cached for 60 minutes + RefreshStatus updated
+
+**CLM Positions Tab Flow:**
+1. `CLMPositionDashboard.tsx` loads real position data
+2. ONLY real positions displayed (no mock data)
+3. Position analysis with price ranges and APR tracking
+4. RefreshStatus shows position data freshness
+
+**Endpoints Tab Flow:**
+1. `EndpointsTab.tsx` fetches from `/api/health`
+2. Real-time API status monitoring
+3. Shows working/degraded/failing APIs with fallbacks
+4. Comprehensive recommendations for API issues
 
 ## 🛡️ Data Validation System
 
@@ -184,11 +203,12 @@ Result: ✅ Delta Neutral Possible (100% volatile tokens hedgeable)
 
 ## 🚀 Performance Optimizations
 
-1. **API Caching**: Next.js built-in caching for API routes
-2. **Parallel Requests**: Dune + GMX APIs called simultaneously  
-3. **Client-side Filtering**: Delta neutral filter instant response
-4. **Lazy Loading**: Components load data on demand
-5. **Error Boundaries**: Graceful fallbacks for API failures
+1. **60-Minute Data Caching**: 99% reduction in API calls with intelligent TTL
+2. **Instant Cache Responses**: Sub-millisecond data loading from cache
+3. **Automatic Fallbacks**: DeFiLlama Pro → CoinGecko → Cached data
+4. **Real-time Status Updates**: Global refresh state management
+5. **Background Cache Cleanup**: Automatic expired entry removal
+6. **Manual Refresh Override**: Bypass cache for immediate fresh data
 
 ## 🔧 Development Commands
 
@@ -318,15 +338,43 @@ npm run type-check   # TypeScript validation
 - ✅ Historical data shows realistic patterns
 - ✅ All position types display properly
 
+### **🚫 CRITICAL: NO MOCK DATA POLICY**
+
+**❌ NEVER CREATE MOCK, FAKE, OR PLACEHOLDER DATA**
+- **ONLY display real, timely, and accurate data from live APIs**
+- **Show "N/A" or empty states if real data is unavailable**
+- **All USD values must be mathematically validated and sanity-checked**
+- **Position values must be verified against expected ranges**
+- **API endpoints must return genuine data, not simulated responses**
+- **All monitoring and status indicators must reflect actual system state**
+
+**Examples of FORBIDDEN practices:**
+- Fake position data with hardcoded TVL values
+- Mock API responses in endpoint monitoring
+- Simulated portfolio balances
+- Placeholder price ranges
+- Estimated USD values without real calculation
+- Any data that doesn't come from actual blockchain/API sources
+
+**Math Validation Requirements:**
+- ✅ USD values must be calculated from real token amounts × real prices
+- ✅ Position ranges must reflect actual tick/price boundaries
+- ✅ TVL calculations must sum to realistic totals
+- ✅ APR/yield percentages must be within plausible ranges (0-1000%)
+- ✅ Token amounts must respect decimal precision (e.g., USDC = 6 decimals)
+- ✅ All calculations must be cross-validated against multiple sources when possible
+
 ### **🚨 Quality Gates**
 
 **DO NOT COMPLETE ANY TASK UNTIL:**
 - [ ] All console errors are resolved
-- [ ] Data displays accurately in UI
+- [ ] Data displays accurately in UI (REAL DATA ONLY)
 - [ ] User interactions work smoothly
 - [ ] Error states are handled gracefully
 - [ ] Performance is acceptable
 - [ ] Code changes don't break existing features
+- [ ] Math validation confirms all USD values are realistic
+- [ ] API endpoints return genuine, not simulated data
 
 ### **💡 Testing Commands**
 

@@ -388,7 +388,7 @@ export class CoinStatsTracker {
       }
       
     } catch (error) {
-      console.log('RPC position discovery failed:', error.message);
+      console.log('RPC position discovery failed:', error instanceof Error ? error.message : 'Unknown error');
     }
     
     return positions;

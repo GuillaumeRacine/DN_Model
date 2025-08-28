@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { defiLlamaAPI } from '../lib/defillama-api';
-import { analyzePoolHedges, generateHedgeSummary } from '../lib/hedge-detector';
+import { useAppStore } from '../lib/store';
+import RefreshStatus from './RefreshStatus';
 
 interface Pool {
   pool: string;
@@ -18,12 +19,6 @@ interface Pool {
   historicalAvgApy?: number;
   fees?: number;
   daysLive?: number;
-  // Hedge analysis fields
-  hasHedges?: boolean;
-  hedgeCount?: number;
-  bestHedgeProtocol?: string;
-  hedgeCoverage?: number;
-  deltaNeutralPossible?: boolean;
 }
 
 export default function TopPoolsTab() {
@@ -31,7 +26,8 @@ export default function TopPoolsTab() {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'apy' | 'tvl' | 'volume'>('apy');
   const [error, setError] = useState<string | null>(null);
-  const [showOnlyDeltaNeutral, setShowOnlyDeltaNeutral] = useState(false);
+  
+  const { setLastRefreshTime } = useAppStore();
 
   useEffect(() => {
     fetchTopPools();
@@ -41,8 +37,12 @@ export default function TopPoolsTab() {
     setLoading(true);
     setError(null);
     try {
+      const refreshStart = new Date();
       console.log('Fetching top pools...');
       const yieldData = await defiLlamaAPI.getYieldPools();
+      
+      // Update global refresh time
+      setLastRefreshTime(refreshStart);
       console.log('Yield data response:', yieldData);
       
       if (yieldData && yieldData.data && Array.isArray(yieldData.data)) {
@@ -94,9 +94,6 @@ export default function TopPoolsTab() {
             daysLive = 30; // Default estimate
           }
 
-          // Analyze hedge availability for the pool
-          const hedgeSummary = generateHedgeSummary(pool.symbol);
-
           return {
             pool: pool.pool,
             symbol: pool.symbol,
@@ -110,13 +107,7 @@ export default function TopPoolsTab() {
             volumeUsd7d: pool.volumeUsd7d || 0,
             historicalAvgApy: pool.apyMean30d || pool.apy, // Use 30d mean or current APY
             fees: estimatedFees,
-            daysLive: daysLive,
-            // Hedge analysis
-            hasHedges: hedgeSummary.hasHedges,
-            hedgeCount: hedgeSummary.hedgeCount,
-            bestHedgeProtocol: hedgeSummary.bestProtocol,
-            hedgeCoverage: hedgeSummary.coverage,
-            deltaNeutralPossible: hedgeSummary.deltaNetural
+            daysLive: daysLive
           };
         });
 
@@ -133,10 +124,8 @@ export default function TopPoolsTab() {
     }
   };
 
-  // Filter pools based on delta neutral selection
-  const filteredPools = showOnlyDeltaNeutral 
-    ? pools.filter(pool => pool.deltaNeutralPossible)
-    : pools;
+  // Use all pools without filtering
+  const filteredPools = pools;
 
   const sortedPools = [...filteredPools].sort((a, b) => {
     switch (sortBy) {
@@ -198,161 +187,119 @@ export default function TopPoolsTab() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center mb-4">
+    <div className="space-y-2">
+      <div className="flex justify-between items-center mb-2">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            Top 100 Yield Pools {showOnlyDeltaNeutral && '(Delta Neutral CLM)'}
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Top Yield Pools
           </h2>
-          <div className="flex items-center gap-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Pools with TVL ≥ $1M, sorted by APY
-            </p>
-            <div className="text-sm text-blue-600 dark:text-blue-400">
-              {pools.filter(p => p.deltaNeutralPossible).length} delta neutral pools available
-            </div>
-          </div>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowOnlyDeltaNeutral(!showOnlyDeltaNeutral)}
-            className={`px-3 py-1 rounded text-sm font-medium ${
-              showOnlyDeltaNeutral
-                ? 'bg-green-600 text-white' 
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            ⚖️ Delta Neutral Only
-          </button>
+        <div className="flex gap-1">
           <button
             onClick={() => setSortBy('apy')}
-            className={`px-3 py-1 rounded text-sm ${
+            className={`px-2 py-1 rounded text-xs ${
               sortBy === 'apy' 
                 ? 'bg-blue-600 text-white' 
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
           >
-            Sort by APY
+            APY
           </button>
           <button
             onClick={() => setSortBy('tvl')}
-            className={`px-3 py-1 rounded text-sm ${
+            className={`px-2 py-1 rounded text-xs ${
               sortBy === 'tvl' 
                 ? 'bg-blue-600 text-white' 
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
           >
-            Sort by TVL
+            TVL
           </button>
           <button
             onClick={() => setSortBy('volume')}
-            className={`px-3 py-1 rounded text-sm ${
+            className={`px-2 py-1 rounded text-xs ${
               sortBy === 'volume' 
                 ? 'bg-blue-600 text-white' 
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
           >
-            Sort by Volume
+            Volume
           </button>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-900">
+            <thead className="bg-gray-100 dark:bg-gray-800">
               <tr>
-                <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-1 py-1 text-left text-xs font-medium text-gray-600 dark:text-gray-300">
                   #
                 </th>
-                <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-1 py-1 text-left text-xs font-medium text-gray-600 dark:text-gray-300">
                   Pool
                 </th>
-                <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-1 py-1 text-left text-xs font-medium text-gray-600 dark:text-gray-300">
                   Chain
                 </th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-1 py-1 text-right text-xs font-medium text-gray-600 dark:text-gray-300">
                   APY
                 </th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-1 py-1 text-right text-xs font-medium text-gray-600 dark:text-gray-300">
                   Avg APY
                 </th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-1 py-1 text-right text-xs font-medium text-gray-600 dark:text-gray-300">
                   TVL
                 </th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-1 py-1 text-right text-xs font-medium text-gray-600 dark:text-gray-300">
                   Volume 24H
                 </th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-1 py-1 text-right text-xs font-medium text-gray-600 dark:text-gray-300">
                   Fees 24H
                 </th>
-                <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Days Live
-                </th>
-                <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Hedge Available
+                <th className="px-1 py-1 text-center text-xs font-medium text-gray-600 dark:text-gray-300">
+                  Days
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800">
               {sortedPools.map((pool, idx) => (
-                <tr key={pool.pool} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-2 py-1 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                <tr key={pool.pool} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <td className="px-1 py-1 whitespace-nowrap text-xs text-gray-700 dark:text-gray-300">
                     {idx + 1}
                   </td>
-                  <td className="px-2 py-1 whitespace-nowrap">
-                    <div className="flex flex-col">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">
-                        {pool.symbol}
-                      </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
-                        {pool.project}
-                      </div>
-                      <div className="text-xs text-gray-400 dark:text-gray-500 font-mono">
-                        {pool.pool.substring(0, 8)}...
-                      </div>
+                  <td className="px-1 py-1 whitespace-nowrap">
+                    <div className="text-xs font-medium text-gray-900 dark:text-white">
+                      {pool.symbol}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      {pool.project}
                     </div>
                   </td>
-                  <td className="px-2 py-1 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getChainColor(pool.chain)}`}>
+                  <td className="px-1 py-1 whitespace-nowrap">
+                    <span className="text-xs text-gray-600 dark:text-gray-400">
                       {pool.chain}
                     </span>
                   </td>
-                  <td className="px-2 py-1 whitespace-nowrap text-right">
-                    <div className="text-sm font-semibold text-green-600">
+                  <td className="px-1 py-1 whitespace-nowrap text-right">
+                    <div className="text-xs font-medium text-green-600">
                       {formatPercent(pool.apy)}
                     </div>
-                    {pool.apyReward > 0 && (
-                      <div className="text-xs text-gray-500">
-                        Base: {formatPercent(pool.apyBase)}
-                      </div>
-                    )}
                   </td>
-                  <td className="px-2 py-1 whitespace-nowrap text-right text-sm text-gray-600 dark:text-gray-400">
+                  <td className="px-1 py-1 whitespace-nowrap text-right text-xs text-gray-600 dark:text-gray-400">
                     {formatPercent(pool.historicalAvgApy || 0)}
                   </td>
-                  <td className="px-2 py-1 whitespace-nowrap text-right text-sm font-medium text-gray-900 dark:text-white">
+                  <td className="px-1 py-1 whitespace-nowrap text-right text-xs font-medium text-gray-900 dark:text-white">
                     {formatNumber(pool.tvlUsd)}
                   </td>
-                  <td className="px-2 py-1 whitespace-nowrap text-right text-sm text-gray-600 dark:text-gray-400">
-                    {pool.volumeUsd1d > 0 ? formatNumber(pool.volumeUsd1d) : 'N/A'}
+                  <td className="px-1 py-1 whitespace-nowrap text-right text-xs text-gray-600 dark:text-gray-400">
+                    {pool.volumeUsd1d > 0 ? formatNumber(pool.volumeUsd1d) : '-'}
                   </td>
-                  <td className="px-2 py-1 whitespace-nowrap text-right text-sm text-gray-600 dark:text-gray-400">
-                    {pool.fees > 0 ? formatNumber(pool.fees) : 'N/A'}
+                  <td className="px-1 py-1 whitespace-nowrap text-right text-xs text-gray-600 dark:text-gray-400">
+                    {(pool.fees || 0) > 0 ? formatNumber(pool.fees || 0) : '-'}
                   </td>
-                  <td className="px-2 py-1 whitespace-nowrap text-center text-sm text-gray-600 dark:text-gray-400">
-                    {formatDaysLive(pool.daysLive)}
-                  </td>
-                  <td className="px-2 py-1 whitespace-nowrap text-center">
-                    {pool.hasHedges ? (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                        Yes
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                        No
-                      </span>
-                    )}
+                  <td className="px-1 py-1 whitespace-nowrap text-center text-xs text-gray-600 dark:text-gray-400">
+                    {formatDaysLive(pool.daysLive || null)}
                   </td>
                 </tr>
               ))}
@@ -366,6 +313,9 @@ export default function TopPoolsTab() {
           <p className="text-gray-500 dark:text-gray-400">No pools found matching criteria</p>
         </div>
       )}
+      
+      {/* Refresh Status */}
+      <RefreshStatus showNextRefresh={true} />
     </div>
   );
 }

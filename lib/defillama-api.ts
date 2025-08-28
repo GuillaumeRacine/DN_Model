@@ -230,16 +230,67 @@ class DefiLlamaAPI {
     };
   }
 
-  // Get current token prices (Pro API)
+  // Get current token prices (Pro API with CoinGecko fallback)
   async getCurrentPrices(coins: string[]): Promise<any> {
-    try {
-      const coinsParam = coins.join(',');
-      const { data } = await this.proAxiosInstance.get(`/coins/prices/current/${coinsParam}`);
-      return data;
-    } catch (error) {
-      console.error('Error fetching current prices from Pro API:', error);
-      return {};
-    }
+    // Import cache helpers dynamically to avoid circular dependencies
+    const { cacheHelpers } = await import('./data-cache');
+    
+    return await cacheHelpers.getTokenPrices(coins, async () => {
+      try {
+        // Try DeFiLlama Pro API first
+        const coinsParam = coins.join(',');
+        const { data } = await this.proAxiosInstance.get(`/coins/prices/current/${coinsParam}`);
+        console.log('✅ DeFiLlama Pro API: Token prices fetched successfully');
+        return data;
+      } catch (error) {
+        console.warn('⚠️ DeFiLlama Pro API failed, trying CoinGecko fallback...', error);
+        
+        try {
+          // Fallback to CoinGecko free API
+          const coingeckoIds = coins
+            .filter(id => id.startsWith('coingecko:'))
+            .map(id => id.replace('coingecko:', ''))
+            .join(',');
+          
+          if (!coingeckoIds) {
+            throw new Error('No CoinGecko compatible coin IDs provided');
+          }
+
+          const response = await axios.get(`https://api.coingecko.com/api/v3/simple/price`, {
+            params: {
+              ids: coingeckoIds,
+              vs_currencies: 'usd',
+              include_24hr_change: true,
+              include_market_cap: true
+            },
+            timeout: 10000
+          });
+
+          // Transform CoinGecko response to match DeFiLlama format
+          const transformed = {
+            coins: {}
+          } as any;
+
+          Object.entries(response.data).forEach(([coinId, data]: [string, any]) => {
+            const defiLlamaId = `coingecko:${coinId}`;
+            transformed.coins[defiLlamaId] = {
+              price: data.usd,
+              mcap: data.usd_market_cap || null,
+              change_24h: data.usd_24h_change || null,
+              symbol: coinId.toUpperCase(),
+              timestamp: Math.floor(Date.now() / 1000)
+            };
+          });
+
+          console.log('✅ CoinGecko fallback: Token prices fetched successfully');
+          return transformed;
+          
+        } catch (fallbackError) {
+          console.error('❌ Both DeFiLlama Pro and CoinGecko failed:', fallbackError);
+          return { coins: {} };
+        }
+      }
+    });
   }
 
   // Get token price changes (Pro API)
@@ -280,13 +331,19 @@ class DefiLlamaAPI {
 
   // Get yield pools data (Pro API)
   async getYieldPools(): Promise<any> {
-    try {
-      const { data } = await this.proAxiosInstance.get('/yields/pools');
-      return data;
-    } catch (error) {
-      console.error('Error fetching yield pools from Pro API:', error);
-      return { data: [] };
-    }
+    // Import cache helpers dynamically to avoid circular dependencies
+    const { cacheHelpers } = await import('./data-cache');
+    
+    return await cacheHelpers.getYieldPools(async () => {
+      try {
+        const { data } = await this.proAxiosInstance.get('/yields/pools');
+        console.log('✅ DeFiLlama Pro API: Yield pools fetched successfully');
+        return data;
+      } catch (error) {
+        console.error('❌ Error fetching yield pools from Pro API:', error);
+        return { data: [] };
+      }
+    });
   }
 
   // Get pool chart data (Pro API)
