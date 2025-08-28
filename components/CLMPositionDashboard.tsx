@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAppStore } from '../lib/store';
 import RefreshStatus from './RefreshStatus';
 import { ETHEREUM_POSITIONS } from '../lib/ethereum-positions';
+import MoralisPositionFinder from './MoralisPositionFinder';
 
 interface Position {
   id: string;
@@ -530,7 +531,33 @@ export default function CLMPositionDashboard() {
         </div>
       </div>
 
-      {/* Positions Table */}
+      {/* Moralis LP Position Finder */}
+      <div className="space-y-4 mb-6">
+        <h2 className="text-md font-semibold text-gray-900 dark:text-white">
+          🔍 Discover Additional LP Positions with Moralis
+        </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* EVM Chains (Base, Ethereum, Arbitrum) */}
+          <MoralisPositionFinder 
+            walletAddress="0x862f26238d773Fde4E29156f3Bb7CF58eA4cD1af"
+            chainType="EVM"
+            onPositionsFound={(positions) => {
+              console.log(`🔍 Moralis found ${positions.length} EVM positions:`, positions);
+            }}
+          />
+          
+          {/* Solana */}
+          <MoralisPositionFinder 
+            walletAddress="DKGQ3gqfq2DpwkKZyazjMY1c1vKjzoX1A9jFrhVnzA3k"
+            chainType="SOLANA"
+            onPositionsFound={(positions) => {
+              console.log(`🔍 Moralis found ${positions.length} Solana positions:`, positions);
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Current Positions Table */}
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2">
         <div className="overflow-x-auto">
           <table className="w-full">
