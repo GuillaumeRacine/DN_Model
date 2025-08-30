@@ -156,8 +156,8 @@ function convertAerodromePosition(aeroPosition: AerodromePosition): EthereumPosi
 }
 
 // Function to fetch real positions from APIs
-// Feature flag for real position fetching - DISABLED for stability, using static data
-const ENABLE_REAL_POSITION_FETCHING = false; // Disabled to ensure Aerodrome positions always show
+// Feature flag for real position fetching (set ENABLE_AERODROME_FETCH=true)
+const ENABLE_REAL_POSITION_FETCHING = process.env.ENABLE_AERODROME_FETCH === 'true';
 
 export async function fetchEthereumPositions(walletAddress: string = WALLET_ADDRESS): Promise<EthereumPosition[]> {
   console.log('🚀 Starting fetchEthereumPositions for real-time data...');

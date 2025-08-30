@@ -3,9 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useAppStore } from '../lib/store';
 import RefreshStatus from './RefreshStatus';
-import { ETHEREUM_POSITIONS } from '../lib/ethereum-positions';
 import MoralisPositionFinder from './MoralisPositionFinder';
-import { accurateOrcaFetcher, AccurateOrcaPosition } from '../lib/accurate-orca-fetcher';
+// Positions are fetched from unified server API
 
 interface Position {
   id: string;
@@ -94,110 +93,38 @@ export default function CLMPositionDashboard() {
     try {
       const refreshStart = new Date();
       
-      // Load real Ethereum/Base positions
-      const { ETHEREUM_POSITIONS } = await import('../lib/ethereum-positions');
-      
-      // Load REAL Orca positions using accurate fetcher (NO MOCK DATA)
-      console.log('🔍 Loading real Orca positions from Helius RPC...');
-      const orcaPositions = await accurateOrcaFetcher.getAccuratePositions();
-      console.log(`✅ Found ${orcaPositions.length} real Orca positions`);
-      
-      // Convert Orca positions to dashboard format
-      const orcaPositionsFormatted: Position[] = orcaPositions.map((pos, index) => ({
-        id: (index + 1).toString(),
-        chain: 'Solana' as const,
-        tokenAccount: pos.tokenAccount,
-        protocol: 'Orca' as const,
-        type: 'Whirlpool' as const,
-        tokenPair: pos.tokenPair,
-        nftMint: pos.nftMint,
-        whirlpool: pos.whirlpool,
-        liquidity: '0', // Not needed for display
-        tvlUsd: pos.tvlUsd,
-        inRange: pos.inRange,
-        confirmed: pos.confirmed,
-        lastUpdated: pos.lastUpdated,
-        apr: pos.apr,
-        tokenA: pos.tokenA,
-        tokenB: pos.tokenB,
-        // Add additional Orca-specific data
-        pendingYield: pos.pendingYield,
-        currentPrice: pos.currentPrice,
-        priceLower: pos.priceLower,
-        priceUpper: pos.priceUpper,
-        priceLabel: pos.priceLabel,
-        dataSource: pos.dataSource
-      }));
-      
-      // REAL POSITIONS ONLY - All verified position data
-      const realPositions: Position[] = [
-        // ETHEREUM/BASE POSITIONS (verified from blockchain)
-        ...ETHEREUM_POSITIONS.map(pos => ({
-          ...pos,
-          liquidity: pos.liquidity || '0',
-          tokenA: pos.token0,
-          tokenB: pos.token1
-        })),
-        
-        // REAL ORCA POSITIONS from Helius RPC + Orca App data verification
-        ...orcaPositionsFormatted,
-        
-        // SUI CETUS POSITIONS - VERIFIED ACCURATE DATA
-        {
-          id: '6',
-          chain: 'SUI' as const,
-          objectId: '0x6c08a2dd40043e58085155c68d78bf3f62f19252feb6effa41b0274b284dbfa0',
-          protocol: 'CETUS' as const,
-          type: 'CLMM' as const,
-          tokenPair: 'USDC/SUI',
-          poolId: '0xb8d7d9e66a60c239e7a60110efcf8de6c705580ed924d0dde141f4a0e2c90105',
-          liquidity: '819643734525',
-          tickLower: 47220,
-          tickUpper: 61560,
-          currentTick: 56585,
-          priceLower: 2.1213,
-          priceUpper: 8.8994,
-          currentPrice: 3.4995,
-          tokenA: 'dba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC',
-          tokenB: '0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
-          inRange: true,
-          confirmed: true,
-          lastUpdated: new Date(),
-          tvlUsd: 28778
-        },
-        {
-          id: '7',
-          chain: 'SUI' as const,
-          objectId: '0xea779abc3048c32ee9b967c4fce95e920b179031c138748e35bf79300017c86d',
-          protocol: 'CETUS' as const,
-          type: 'CLMM' as const,
-          tokenPair: 'ETH/USDC',
-          poolId: '0x7964b4b7d7517b32b2ba0e5b1a8e9d6e2b8c3c4b1a2d5e3f4e5a6b7c8d9e0f1a2b',
-          liquidity: '13929332143',
-          tickLower: 4294926316,
-          tickUpper: 4294934596,
-          currentTick: 4294956585,
-          priceLower: 2630.7,
-          priceUpper: 6020.73,
-          currentPrice: 4586.07,
-          tokenA: 'dba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC',
-          tokenB: 'af8cd5edc19c4512f4259f0bee101a40d41ebed738ade5874359610ef8eeced5::eth::ETH',
-          inRange: true,
-          confirmed: true,
-          lastUpdated: new Date(),
-          tvlUsd: 34864
-        }
-      ];
+      // Fetch unified, server-normalized positions
+      const res = await fetch('/api/positions-health');
+      const json = await res.json();
+      const normalized = Array.isArray(json.positions) ? json.positions : [];
 
-      // Data is pre-validated for performance
+      const realPositions: Position[] = normalized.map((p: any, idx: number) => {
+        const prot = String(p.protocol || 'Unknown');
+        const type = prot.toLowerCase().includes('aerodrome') ? 'Slipstream'
+                    : prot.toLowerCase().includes('orca') ? 'Whirlpool'
+                    : 'V3';
+        return {
+          id: p.id || String(idx + 1),
+          chain: p.chain,
+          protocol: prot as any,
+          type: type as any,
+          tokenPair: p.tokenPair || 'Unknown',
+          tvlUsd: typeof p.tvlUsd === 'number' ? p.tvlUsd : undefined,
+          inRange: (typeof p.inRange === 'boolean') ? p.inRange : null,
+          confirmed: true,
+          lastUpdated: p.lastUpdated ? new Date(p.lastUpdated) : undefined,
+          priceLower: p.priceLower ?? undefined,
+          priceUpper: p.priceUpper ?? undefined,
+          currentPrice: p.currentPrice ?? undefined,
+          dataSource: p.dataSource || undefined
+        } as Position;
+      });
 
       setPositions(realPositions);
       
       // Calculate summary
       const inRangeCount = realPositions.filter(p => p.inRange === true).length;
-      const totalLiquidity = realPositions
-        .filter(p => p.liquidity)
-        .reduce((sum, p) => sum + Number(p.liquidity), 0);
+      const totalLiquidity = 0;
       const totalTvlUsd = realPositions
         .filter(p => p.tvlUsd)
         .reduce((sum, p) => sum + (p.tvlUsd || 0), 0);
@@ -208,12 +135,12 @@ export default function CLMPositionDashboard() {
         totalLiquidity,
         totalTvlUsd,
         protocols: {
-          orca: realPositions.filter(p => p.protocol === 'Orca').length, // Restored Orca positions
-          raydium: realPositions.filter(p => p.protocol === 'Raydium').length, // Restored Raydium positions  
-          cetus: realPositions.filter(p => p.protocol === 'CETUS').length,
-          uniswapV3: realPositions.filter(p => p.protocol === 'Uniswap V3').length,
-          aerodrome: realPositions.filter(p => p.protocol === 'Aerodrome').length,
-          gmxV2: realPositions.filter(p => p.protocol === 'GMX V2').length
+          orca: realPositions.filter(p => (p.protocol || '').toLowerCase().includes('orca')).length,
+          raydium: realPositions.filter(p => (p.protocol || '').toLowerCase().includes('raydium')).length,
+          cetus: realPositions.filter(p => (p.protocol || '').toLowerCase().includes('cetus')).length,
+          uniswapV3: realPositions.filter(p => (p.protocol || '').toLowerCase().includes('uniswap')).length,
+          aerodrome: realPositions.filter(p => (p.protocol || '').toLowerCase().includes('aerodrome')).length,
+          gmxV2: realPositions.filter(p => (p.protocol || '').toLowerCase().includes('gmx')).length
         },
         chains: {
           solana: realPositions.filter(p => p.chain === 'Solana').length, // Restored Solana positions

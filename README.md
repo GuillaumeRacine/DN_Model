@@ -64,6 +64,12 @@ NEXT_PUBLIC_DEFILLAMA_API_KEY=your_defillama_pro_key
 
 # Position IDs & Wallet Addresses
 # See endpoints.md for complete setup instructions
+
+# Optional feature flags
+# Enable live Aerodrome position fetching on Base
+ENABLE_AERODROME_FETCH=true
+# Enable live Orca position fetching (requires HELIUS_RPC_URL)
+ENABLE_ORCA_POSITIONS=true
 ```
 
 **📋 Complete API Setup Guide**: See `endpoints.md` for comprehensive instructions on:
@@ -246,3 +252,10 @@ http://localhost:3002
 ---
 
 Built with ❤️ for the DeFi community
+
+### Generate Deterministic Pool IDs (for DN analysis)
+```bash
+# Save top 500 pools by APY with TVL ≥ $1M to data/pools/top-by-apy/
+DEFILLAMA_API_KEY=your_key npm run save-top-pools
+```
+This writes pool records with deterministic IDs (contract or on-chain addresses when available) to `data/pools/top-by-apy/` and per-chain subfolders (e.g., `solana/`, `sui/`, `ethereum/`) with rolling `index.json` files.

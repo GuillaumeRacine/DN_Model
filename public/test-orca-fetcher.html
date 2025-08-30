@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Orca Fetcher</title>
+</head>
+<body>
+    <h1>Testing Orca Fetcher in Browser</h1>
+    <div id="results"></div>
+    
+    <script type="module">
+        async function testOrcaFetcher() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Testing Orca fetcher...</p>';
+            
+            try {
+                console.log('🧪 Testing Orca fetcher in browser environment');
+                
+                // Try to dynamically import the fetcher
+                const { accurateOrcaFetcher } = await import('/lib/accurate-orca-fetcher.js');
+                console.log('✅ Successfully imported accurateOrcaFetcher');
+                
+                const positions = await accurateOrcaFetcher.getAccuratePositions();
+                console.log(`📊 Found ${positions.length} positions:`, positions);
+                
+                if (positions.length > 0) {
+                    let html = '<h2>✅ SUCCESS: Found Orca Positions!</h2><ul>';
+                    positions.forEach((pos, index) => {
+                        html += `<li><strong>${pos.tokenPair}</strong>: $${pos.tvlUsd} (${pos.inRange ? 'IN RANGE' : 'OUT OF RANGE'})</li>`;
+                    });
+                    html += '</ul>';
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = '<h2>🔴 NO POSITIONS FOUND</h2><p>This explains why the dashboard is empty!</p>';
+                }
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                resultsDiv.innerHTML = `<h2>❌ ERROR</h2><p>${error.message}</p>`;
+            }
+        }
+        
+        // Run the test when page loads
+        testOrcaFetcher();
+    </script>
+</body>
+</html>

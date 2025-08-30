@@ -280,6 +280,16 @@ class AerodromePositionFetcher {
     }
   }
 
+  // Fetch USD prices for Base tokens using DeFiLlama Pro (if configured)
+  private async getUsdPricesBase(addresses: string[]): Promise<Record<string, number>> {
+    try {
+      const { getBaseTokenPrices } = await import('./token-prices');
+      return await getBaseTokenPrices(addresses);
+    } catch {
+      return {};
+    }
+  }
+
   // Get pool contract for token pair
   private async getPool(token0: string, token1: string, fee: number): Promise<string> {
     // Determine tick spacing based on fee
@@ -438,16 +448,24 @@ class AerodromePositionFetcher {
             token1Info.decimals
           );
           
-          // Estimate TVL (simplified calculation)
-          // This would need token price oracles for accurate USD values
+          // Estimate TVL in USD
           let tvlUsd = 0;
-          if (token0Info.symbol === 'USDC' || token0Info.symbol === 'USDbC') {
+          const isStable0 = token0Info.symbol === 'USDC' || token0Info.symbol === 'USDbC';
+          const isStable1 = token1Info.symbol === 'USDC' || token1Info.symbol === 'USDbC';
+          if (isStable0) {
             tvlUsd = parseFloat(amounts.amount0) + (parseFloat(amounts.amount1) * currentPrice);
-          } else if (token1Info.symbol === 'USDC' || token1Info.symbol === 'USDbC') {
+          } else if (isStable1) {
             tvlUsd = parseFloat(amounts.amount1) + (parseFloat(amounts.amount0) / currentPrice);
           } else {
-            // Rough estimate using current pool price
-            tvlUsd = (parseFloat(amounts.amount0) + parseFloat(amounts.amount1) * currentPrice) * 1000; // Placeholder multiplier
+            // Fetch USD prices for both tokens via DeFiLlama Pro if available
+            const prices = await this.getUsdPricesBase([token0Info.address, token1Info.address]);
+            const p0 = prices[token0Info.address.toLowerCase()];
+            const p1 = prices[token1Info.address.toLowerCase()];
+            if (typeof p0 === 'number' && typeof p1 === 'number') {
+              tvlUsd = parseFloat(amounts.amount0) * p0 + parseFloat(amounts.amount1) * p1;
+            } else {
+              tvlUsd = 0; // Unknown — leave as 0 rather than guessing
+            }
           }
           
           const position: AerodromePosition = {

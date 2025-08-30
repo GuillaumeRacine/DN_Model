@@ -1,6 +1,5 @@
 import { useAppStore } from '../lib/store';
 import { useState, useEffect } from 'react';
-import { dataCache } from '../lib/data-cache';
 
 interface RefreshStatusProps {
   className?: string;
@@ -27,13 +26,31 @@ export default function RefreshStatus({
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
-      
-      if (showCacheDetails) {
-        setCacheMetadata(dataCache.getAllMetadata());
-      }
     }, 1000);
 
-    return () => clearInterval(timer);
+    let poller: NodeJS.Timeout | null = null;
+    const fetchCache = async () => {
+      try {
+        const res = await fetch('/api/cache-status');
+        if (res.ok) {
+          const json = await res.json();
+          // cacheDetails is a record { key: { timestamp, source, ... } }
+          setCacheMetadata(json.cacheDetails || {});
+        }
+      } catch {
+        // ignore
+      }
+    };
+
+    if (showCacheDetails) {
+      fetchCache();
+      poller = setInterval(fetchCache, 5000);
+    }
+
+    return () => {
+      clearInterval(timer);
+      if (poller) clearInterval(poller);
+    };
   }, [showCacheDetails]);
 
   const formatTimeAgo = (date: Date | null): string => {

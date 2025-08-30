@@ -287,8 +287,8 @@ export class SolanaPortfolioTracker {
             } else {
               console.log('  ❌ Failed to fetch metadata:', metadataResponse.status);
             }
-          } catch (metaError) {
-            console.log('  ❌ Metadata fetch error:', metaError.message);
+          } catch (metaError: any) {
+            console.log('  ❌ Metadata fetch error:', metaError?.message || metaError);
           }
         }
       } else {

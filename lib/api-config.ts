@@ -148,7 +148,20 @@ export class APIClient {
   }
 
   private async makeRequest(config: any, endpoint: string, params: any) {
-    const url = `${config.url}${endpoint}`;
+    // Build URL with optional query handling
+    let url = `${config.url}${endpoint}`;
+    if (params?.query) {
+      // Accept either full query string (starting with '?') or raw query
+      const q = String(params.query);
+      url += q.startsWith('?') ? q : `?${q}`;
+    } else if (params?.searchParams && typeof params.searchParams === 'object') {
+      const sp = new URLSearchParams();
+      Object.entries(params.searchParams).forEach(([k, v]) => {
+        if (v !== undefined && v !== null) sp.append(k, String(v));
+      });
+      const qs = sp.toString();
+      if (qs) url += (url.includes('?') ? '&' : '?') + qs;
+    }
     const options: RequestInit = {
       method: params.method || 'GET',
       headers: {

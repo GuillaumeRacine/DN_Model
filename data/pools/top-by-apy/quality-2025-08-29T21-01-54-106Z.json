@@ -1,0 +1,2252 @@
+{
+  "generatedAt": "2025-08-29T21:01:54.107Z",
+  "minTVL": 1000000,
+  "limit": 100,
+  "counts": {
+    "total": 100,
+    "missingSeries": 100,
+    "missingAnalytics": 92,
+    "poolsWithTokenGaps": 86,
+    "complete": -178
+  },
+  "report": [
+    {
+      "pool": "bf599ba2-97ae-48bb-9fd0-4f647ad7a832",
+      "project": "aerodrome-slipstream",
+      "symbol": "USDC-CBBTC",
+      "chain": "Base",
+      "tvlUsd": 7211076,
+      "apy": 923.02653,
+      "pairKey": "CBBTC-USDC",
+      "analyticsKey": "CBBTC-USDC|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        },
+        {
+          "id": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "d7e94a53-943b-43ff-a842-3b2448df20ec",
+      "project": "raydium-amm",
+      "symbol": "PUMP-USDC",
+      "chain": "Solana",
+      "tvlUsd": 1955385,
+      "apy": 680.68,
+      "pairKey": "PUMP-USDC",
+      "analyticsKey": "PUMP-USDC|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "21dfa227-f69a-402c-9b63-6da59a97feee",
+      "project": "uniswap-v3",
+      "symbol": "WETH-BLOCK",
+      "chain": "Ethereum",
+      "tvlUsd": 3915384,
+      "apy": 598.46271,
+      "pairKey": "BLOCK-WETH",
+      "analyticsKey": "BLOCK-WETH|ethereum",
+      "hasAnalytics": true,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        },
+        {
+          "id": "0xcab84bc21f9092167fcfe0ea60f5ce053ab39a1e",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "aa238e14-a8a5-4a10-9ad6-88d2c1d0eb50",
+      "project": "raydium-amm",
+      "symbol": "WSOL-AU79",
+      "chain": "Solana",
+      "tvlUsd": 1007716,
+      "apy": 537.83,
+      "pairKey": "AU79-WSOL",
+      "analyticsKey": "AU79-WSOL|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "d59f3331-ac44-417b-825b-d3583bc48edb",
+      "project": "raydium-amm",
+      "symbol": "WSOL-AOL",
+      "chain": "Solana",
+      "tvlUsd": 1043601,
+      "apy": 536.64,
+      "pairKey": "AOL-WSOL",
+      "analyticsKey": "AOL-WSOL|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "7e7146ae-3146-4bf3-8d7b-67f618791b83",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-KTA",
+      "chain": "Base",
+      "tvlUsd": 2676494,
+      "apy": 530.96374,
+      "pairKey": "KTA-WETH",
+      "analyticsKey": "KTA-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xc0634090f2fe6c6d75e61be2b949464abb498973",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "cafbed21-f8ba-45bb-b552-eca72bdcc1f9",
+      "project": "tortuga",
+      "symbol": "TAPT",
+      "chain": "Aptos",
+      "tvlUsd": 1223201,
+      "apy": 516.94262,
+      "pairKey": "TAPT",
+      "analyticsKey": "TAPT|aptos",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "5da12137-c29a-45bb-8893-f6c01400ae02",
+      "project": "orca-dex",
+      "symbol": "SOL-FARTCOIN",
+      "chain": "Solana",
+      "tvlUsd": 3407154,
+      "apy": 495.72885,
+      "pairKey": "FARTCOIN-SOL",
+      "analyticsKey": "FARTCOIN-SOL|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "so11111111111111111111111111111111111111112",
+          "days": 0
+        },
+        {
+          "id": "9bb6nfecjbctnnlfko2fqvqbq8hhm13kcyycdqbgpump",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "ee8fbbb9-9fb4-41f5-91da-fffbf295297d",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-AAA",
+      "chain": "Base",
+      "tvlUsd": 1446336,
+      "apy": 466.90762,
+      "pairKey": "AAA-WETH",
+      "analyticsKey": "AAA-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xaaa843fb2916c0b57454270418e121c626402aaa",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "57564e54-de10-4926-86f9-c40b61064404",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-REI",
+      "chain": "Base",
+      "tvlUsd": 1571236,
+      "apy": 463.11447,
+      "pairKey": "REI-WETH",
+      "analyticsKey": "REI-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x6b2504a03ca4d43d0d73776f6ad46dab2f2a4cfd",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "8b9364e9-c90f-4fe0-ab3e-21667884e71c",
+      "project": "aerodrome-slipstream",
+      "symbol": "GIZA-USDC",
+      "chain": "Base",
+      "tvlUsd": 2592765,
+      "apy": 398.65029,
+      "pairKey": "GIZA-USDC",
+      "analyticsKey": "GIZA-USDC|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x590830dfdf9a3f68afcdde2694773debdf267774",
+          "days": 0
+        },
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "a426dd28-dbe8-4686-ab07-bd25c89c75e2",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-SKI",
+      "chain": "Base",
+      "tvlUsd": 1756569,
+      "apy": 397.48411,
+      "pairKey": "SKI-WETH",
+      "analyticsKey": "SKI-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x768be13e1680b5ebe0024c42c896e3db59ec0149",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "c2859369-1954-46b0-a692-8a9c5aa77624",
+      "project": "uniswap-v3",
+      "symbol": "CRO-WETH",
+      "chain": "Ethereum",
+      "tvlUsd": 1085461,
+      "apy": 389.3275,
+      "pairKey": "CRO-WETH",
+      "analyticsKey": "CRO-WETH|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xa0b73e1ff0b80914ab6fe0444e65848c4c34450b",
+          "days": 0
+        },
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "789b34d1-5b2f-4ae0-ae31-58afa527afd9",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-RSC",
+      "chain": "Base",
+      "tvlUsd": 1075035,
+      "apy": 326.30129,
+      "pairKey": "RSC-WETH",
+      "analyticsKey": "RSC-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xfbb75a59193a3525a8825bebe7d4b56899e2f7e1",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "6d4ab01f-35cb-45e1-a89b-4a67feba9ce6",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-KEYCAT",
+      "chain": "Base",
+      "tvlUsd": 1073422,
+      "apy": 324.6298,
+      "pairKey": "KEYCAT-WETH",
+      "analyticsKey": "KEYCAT-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x9a26f5433671751c3276a065f57e5a02d2817973",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "d7b0af87-0dba-4f48-8505-c801fccad673",
+      "project": "aerodrome-slipstream",
+      "symbol": "BNKR-WETH",
+      "chain": "Base",
+      "tvlUsd": 1337419,
+      "apy": 289.65073,
+      "pairKey": "BNKR-WETH",
+      "analyticsKey": "BNKR-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x22af33fe49fd1fa80c7149773dde5890d3c76f3b",
+          "days": 0
+        },
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "64af7438-4b30-4f29-b92e-04da74fcc7dc",
+      "project": "aerodrome-slipstream",
+      "symbol": "MAMO-CBBTC",
+      "chain": "Base",
+      "tvlUsd": 3055285,
+      "apy": 280.44804,
+      "pairKey": "CBBTC-MAMO",
+      "analyticsKey": "CBBTC-MAMO|base",
+      "hasAnalytics": true,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x7300b37dfdfab110d83290a29dfb31b1740219fe",
+          "days": 0
+        },
+        {
+          "id": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "52d89cef-b6c5-4f9b-b5f1-1b4bdc9b641c",
+      "project": "balancer-v3",
+      "symbol": "RZR-WEETH",
+      "chain": "Ethereum",
+      "tvlUsd": 1377642,
+      "apy": 265.71383,
+      "pairKey": "RZR-WEETH",
+      "analyticsKey": "RZR-WEETH|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xb4444468e444f89e1c2cac2f1d3ee7e336cbd1f5",
+          "days": 0
+        },
+        {
+          "id": "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "ff82c362-dea1-4946-b3b1-92ebd5100b1e",
+      "project": "aerodrome-slipstream",
+      "symbol": "USDC-CBBTC",
+      "chain": "Base",
+      "tvlUsd": 28321070,
+      "apy": 255.43682,
+      "pairKey": "CBBTC-USDC",
+      "analyticsKey": "CBBTC-USDC|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        },
+        {
+          "id": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "dd8c11fb-4e20-4d65-83ff-6f652ed54750",
+      "project": "aerodrome-slipstream",
+      "symbol": "VIRTUAL-MAMO",
+      "chain": "Base",
+      "tvlUsd": 2512724,
+      "apy": 253.28895,
+      "pairKey": "MAMO-VIRTUAL",
+      "analyticsKey": "MAMO-VIRTUAL|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b",
+          "days": 0
+        },
+        {
+          "id": "0x7300b37dfdfab110d83290a29dfb31b1740219fe",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "a09feb82-76db-4291-aea9-dc6e88343e09",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-USOL",
+      "chain": "Base",
+      "tvlUsd": 1413590,
+      "apy": 242.93741,
+      "pairKey": "USOL-WETH",
+      "analyticsKey": "USOL-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x9b8df6e244526ab5f6e6400d331db28c8fdddb55",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "593f459f-867e-40c5-9f8a-4724dfaa5bfc",
+      "project": "cetus-amm",
+      "symbol": "WAL-SUI",
+      "chain": "Sui",
+      "tvlUsd": 1005532,
+      "apy": 236.54834,
+      "pairKey": "SUI-WAL",
+      "analyticsKey": "SUI-WAL|sui",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x356a26eb9e012a68958082340d4c4116e7f55615cf27affcff209cf0ae544f59::wal::wal",
+          "days": 0
+        },
+        {
+          "id": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::sui",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "53b7036a-ec2a-494b-ad8e-ae53f35c20b8",
+      "project": "aerodrome-slipstream",
+      "symbol": "AERO-CBBTC",
+      "chain": "Base",
+      "tvlUsd": 4151934,
+      "apy": 235.1896,
+      "pairKey": "AERO-CBBTC",
+      "analyticsKey": "AERO-CBBTC|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+          "days": 0
+        },
+        {
+          "id": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "0735311d-4b8a-4a2c-a625-bad22e98b08c",
+      "project": "uniswap-v3",
+      "symbol": "FLOCK-USDC",
+      "chain": "Base",
+      "tvlUsd": 1346423,
+      "apy": 233.89055,
+      "pairKey": "FLOCK-USDC",
+      "analyticsKey": "FLOCK-USDC|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x5ab3d4c385b400f3abb49e80de2faf6a88a7b691",
+          "days": 0
+        },
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "709f121d-d3b4-44da-b3d0-47bc16f5400b",
+      "project": "raydium-amm",
+      "symbol": "WSOL-USDC",
+      "chain": "Solana",
+      "tvlUsd": 15280614,
+      "apy": 230.01,
+      "pairKey": "USDC-WSOL",
+      "analyticsKey": "USDC-WSOL|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "438b0229-b9ce-4e98-9b8d-e9527c61aff3",
+      "project": "uniswap-v3",
+      "symbol": "ZORA-WETH",
+      "chain": "Base",
+      "tvlUsd": 1157326,
+      "apy": 212.19328,
+      "pairKey": "WETH-ZORA",
+      "analyticsKey": "WETH-ZORA|base",
+      "hasAnalytics": true,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x1111111111166b7fe7bd91427724b487980afc69",
+          "days": 0
+        },
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "6920d26e-1f5e-44cd-a925-cd09c73e5bba",
+      "project": "raydium-amm",
+      "symbol": "WSOL-KORI",
+      "chain": "Solana",
+      "tvlUsd": 1233811,
+      "apy": 210.32,
+      "pairKey": "KORI-WSOL",
+      "analyticsKey": "KORI-WSOL|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "f884e3f7-f6e1-4b9e-b041-8624411ccddf",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-MORPHO",
+      "chain": "Base",
+      "tvlUsd": 3738955,
+      "apy": 206.68346,
+      "pairKey": "MORPHO-WETH",
+      "analyticsKey": "MORPHO-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xbaa5cc21fd487b8fcc2f632f3f4e8d37262a0842",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "ee21c420-e7aa-442b-b020-aa0ad800c845",
+      "project": "aerodrome-slipstream",
+      "symbol": "ZORA-USDC",
+      "chain": "Base",
+      "tvlUsd": 3589445,
+      "apy": 203.85942,
+      "pairKey": "USDC-ZORA",
+      "analyticsKey": "USDC-ZORA|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x1111111111166b7fe7bd91427724b487980afc69",
+          "days": 0
+        },
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "49d6cc94-f311-447b-9de2-d44be06b9637",
+      "project": "aerodrome-slipstream",
+      "symbol": "CLANKER-WETH",
+      "chain": "Base",
+      "tvlUsd": 1763163,
+      "apy": 198.5866,
+      "pairKey": "CLANKER-WETH",
+      "analyticsKey": "CLANKER-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x1bc0c42215582d5a085795f4badbac3ff36d1bcb",
+          "days": 0
+        },
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "2858944c-bae3-4290-b64d-c3db60d2a114",
+      "project": "hyperion",
+      "symbol": "APT-USDC",
+      "chain": "Aptos",
+      "tvlUsd": 4343339,
+      "apy": 196.79846,
+      "pairKey": "APT-USDC",
+      "analyticsKey": "APT-USDC|aptos",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x000000000000000000000000000000000000000000000000000000000000000a",
+          "days": 0
+        },
+        {
+          "id": "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "d87275b5-c6f2-48be-bcf0-23a87cab80ec",
+      "project": "aerodrome-slipstream",
+      "symbol": "VIRTUAL-WETH",
+      "chain": "Base",
+      "tvlUsd": 1882877,
+      "apy": 195.94222,
+      "pairKey": "VIRTUAL-WETH",
+      "analyticsKey": "VIRTUAL-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b",
+          "days": 0
+        },
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "4febf5f4-deda-4d36-9ae6-e29124485404",
+      "project": "uniswap-v3",
+      "symbol": "WETH-KTA",
+      "chain": "Base",
+      "tvlUsd": 4356919,
+      "apy": 186.2542,
+      "pairKey": "KTA-WETH",
+      "analyticsKey": "KTA-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xc0634090f2fe6c6d75e61be2b949464abb498973",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "674284ff-72e3-4c27-9835-f5ec7833f899",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-TOSHI",
+      "chain": "Base",
+      "tvlUsd": 1738557,
+      "apy": 171.71122,
+      "pairKey": "TOSHI-WETH",
+      "analyticsKey": "TOSHI-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xac1bd2486aaf3b5c0fc3fd868558b082a531b2b4",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "228b9f00-64f1-4283-bca8-b4cd5fbd6f28",
+      "project": "beefy",
+      "symbol": "WAVAX-USDC",
+      "chain": "Avalanche",
+      "tvlUsd": 1143262,
+      "apy": 164.89176,
+      "pairKey": "USDC-WAVAX",
+      "analyticsKey": "USDC-WAVAX|avalanche",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+          "days": 0
+        },
+        {
+          "id": "0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "f8d7c5ff-1d26-4bda-b2bd-a40ae9a35762",
+      "project": "raydium-amm",
+      "symbol": "WSOL-USDC",
+      "chain": "Solana",
+      "tvlUsd": 2796260,
+      "apy": 161.32,
+      "pairKey": "USDC-WSOL",
+      "analyticsKey": "USDC-WSOL|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "209767d1-1e76-4d5c-a824-7b6bb9008bb3",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-EURC",
+      "chain": "Base",
+      "tvlUsd": 2973719,
+      "apy": 160.87737,
+      "pairKey": "EURC-WETH",
+      "analyticsKey": "EURC-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "104b3467-bba3-4923-851d-aa9e6ff47611",
+      "project": "rezerve-money",
+      "symbol": "LSTRZR",
+      "chain": "Sonic",
+      "tvlUsd": 1989428,
+      "apy": 159.00688,
+      "pairKey": "LSTRZR",
+      "analyticsKey": "LSTRZR|sonic",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xb4444468e444f89e1c2cac2f1d3ee7e336cbd1f5",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "afe10985-1d71-48b3-a328-4c0e93e8ef4c",
+      "project": "uniswap-v2",
+      "symbol": "WETH-DOGC",
+      "chain": "Ethereum",
+      "tvlUsd": 2024225,
+      "apy": 156.23621,
+      "pairKey": "DOGC-WETH",
+      "analyticsKey": "DOGC-WETH|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        },
+        {
+          "id": "0xeeacc51af745846ddf46012b46c6910ea9b12898",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "1e950c05-28ff-458a-b8bb-160697d6d751",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-COOKIE",
+      "chain": "Base",
+      "tvlUsd": 1576687,
+      "apy": 155.29956,
+      "pairKey": "COOKIE-WETH",
+      "analyticsKey": "COOKIE-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xc0041ef357b183448b235a8ea73ce4e4ec8c265f",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "4304484b-d197-45d5-8d53-39c52b139377",
+      "project": "aerodrome-slipstream",
+      "symbol": "VIRTUAL-WETH",
+      "chain": "Base",
+      "tvlUsd": 11195486,
+      "apy": 152.09909,
+      "pairKey": "VIRTUAL-WETH",
+      "analyticsKey": "VIRTUAL-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b",
+          "days": 0
+        },
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "ba7d8792-49fa-440b-bfa2-c468de0a5fa5",
+      "project": "aerodrome-slipstream",
+      "symbol": "USDC-AAA",
+      "chain": "Base",
+      "tvlUsd": 1200094,
+      "apy": 144.17736,
+      "pairKey": "AAA-USDC",
+      "analyticsKey": "AAA-USDC|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        },
+        {
+          "id": "0xaaa843fb2916c0b57454270418e121c626402aaa",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "f2cba9c1-a2a6-4c7a-a3d8-da976baedbd8",
+      "project": "raydium-amm",
+      "symbol": "WSOL-USDC",
+      "chain": "Solana",
+      "tvlUsd": 2603789,
+      "apy": 143.98,
+      "pairKey": "USDC-WSOL",
+      "analyticsKey": "USDC-WSOL|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "9b8da01e-a2d6-427b-95ef-96df8de8d32f",
+      "project": "origami-finance",
+      "symbol": "ORIBGT",
+      "chain": "Berachain",
+      "tvlUsd": 16235417,
+      "apy": 141.38706,
+      "pairKey": "ORIBGT",
+      "analyticsKey": "ORIBGT|berachain",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xac03caba51e17c86c921e1f6cbfbdc91f8bb2e6b",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "e96c24c3-ebf1-41f8-a11b-acba75501579",
+      "project": "aerodrome-slipstream",
+      "symbol": "MAMO-USDC",
+      "chain": "Base",
+      "tvlUsd": 1581244,
+      "apy": 135.27179,
+      "pairKey": "MAMO-USDC",
+      "analyticsKey": "MAMO-USDC|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x7300b37dfdfab110d83290a29dfb31b1740219fe",
+          "days": 0
+        },
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "b6f73dfd-b496-41c4-a2fb-c13169328ad1",
+      "project": "uniswap-v2",
+      "symbol": "USDC-RFG",
+      "chain": "Base",
+      "tvlUsd": 1482022,
+      "apy": 132.30276,
+      "pairKey": "RFG-USDC",
+      "analyticsKey": "RFG-USDC|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        },
+        {
+          "id": "0xa5053c346f4759198bd6b64171db1eff4cba6331",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "4d6914cc-4df2-4f1a-8b89-7681721d1758",
+      "project": "uniswap-v3",
+      "symbol": "WPOL-USDT",
+      "chain": "Polygon",
+      "tvlUsd": 1793419,
+      "apy": 132.22456,
+      "pairKey": "USDT-WPOL",
+      "analyticsKey": "USDT-WPOL|polygon",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+          "days": 0
+        },
+        {
+          "id": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "39b502cc-d1f2-4c44-8725-c03c04b60864",
+      "project": "cetus-amm",
+      "symbol": "DEEP-SUI",
+      "chain": "Sui",
+      "tvlUsd": 2467186,
+      "apy": 131.78324,
+      "pairKey": "DEEP-SUI",
+      "analyticsKey": "DEEP-SUI|sui",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xdeeb7a4662eec9f2f3def03fb937a663dddaa2e215b8078a284d026b7946c270::deep::deep",
+          "days": 0
+        },
+        {
+          "id": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::sui",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "31ed7657-e02c-427b-8e3e-c0bf24e6cb9b",
+      "project": "aerodrome-slipstream",
+      "symbol": "USDC-AERO",
+      "chain": "Base",
+      "tvlUsd": 5317997,
+      "apy": 131.57511,
+      "pairKey": "AERO-USDC",
+      "analyticsKey": "AERO-USDC|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        },
+        {
+          "id": "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "9ee8c188-096b-4613-958a-0ff9ac9cc799",
+      "project": "uniswap-v2",
+      "symbol": "WETH-MITO",
+      "chain": "Base",
+      "tvlUsd": 1036342,
+      "apy": 131.4065,
+      "pairKey": "MITO-WETH",
+      "analyticsKey": "MITO-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x5cdb96dde8dec778da2b0aee25bc300e5e4f9b76",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "e9440a04-578f-43b8-8c53-c44c1187183d",
+      "project": "uniswap-v3",
+      "symbol": "WTAO-WETH",
+      "chain": "Ethereum",
+      "tvlUsd": 1727088,
+      "apy": 130.04152,
+      "pairKey": "WETH-WTAO",
+      "analyticsKey": "WETH-WTAO|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x77e06c9eccf2e797fd462a92b6d7642ef85b0a44",
+          "days": 0
+        },
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "2df3e378-a3c7-4187-995f-51fe7ff18ccb",
+      "project": "uniswap-v3",
+      "symbol": "VIRTUAL-USDC",
+      "chain": "Base",
+      "tvlUsd": 1660260,
+      "apy": 128.31453,
+      "pairKey": "USDC-VIRTUAL",
+      "analyticsKey": "USDC-VIRTUAL|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b",
+          "days": 0
+        },
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "9ccbebab-a66d-4b9e-bf6a-47ea1d638874",
+      "project": "berapaw",
+      "symbol": "LBGT",
+      "chain": "Berachain",
+      "tvlUsd": 2545066,
+      "apy": 127.10288,
+      "pairKey": "LBGT",
+      "analyticsKey": "LBGT|berachain",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xbaadcc2962417c01af99fb2b7c75706b9bd6babe",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "e5244fed-5ffd-49bb-a14f-4009e25ccb2b",
+      "project": "navi-lending",
+      "symbol": "IKA",
+      "chain": "Sui",
+      "tvlUsd": 3027175,
+      "apy": 125.86013,
+      "pairKey": "IKA",
+      "analyticsKey": "IKA|sui",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "593fca5b-1e6c-492e-bb8c-30c5307defb8",
+      "project": "raydium-amm",
+      "symbol": "CARDS-USDC",
+      "chain": "Solana",
+      "tvlUsd": 2022385,
+      "apy": 125.28635,
+      "pairKey": "CARDS-USDC",
+      "analyticsKey": "CARDS-USDC|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "94b37203-fcba-41e8-97e8-cbb0f92a2f41",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-DEGEN",
+      "chain": "Base",
+      "tvlUsd": 1713913,
+      "apy": 124.22003,
+      "pairKey": "DEGEN-WETH",
+      "analyticsKey": "DEGEN-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "672b41a1-ee8c-4c61-95c9-5dd1e0146feb",
+      "project": "francium",
+      "symbol": "SOL-USDT",
+      "chain": "Solana",
+      "tvlUsd": 1378934,
+      "apy": 123.12468,
+      "pairKey": "SOL-USDT",
+      "analyticsKey": "SOL-USDT|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "fc9f488e-8183-416f-a61e-4e5c571d4395",
+      "project": "uniswap-v3",
+      "symbol": "WETH-USDT",
+      "chain": "Ethereum",
+      "tvlUsd": 95665895,
+      "apy": 122.72277,
+      "pairKey": "USDT-WETH",
+      "analyticsKey": "USDT-WETH|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        },
+        {
+          "id": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "ba721671-cd58-47b8-8678-1c1275c3b1b6",
+      "project": "uniswap-v3",
+      "symbol": "ZORA-USDC",
+      "chain": "Base",
+      "tvlUsd": 5182162,
+      "apy": 122.43358,
+      "pairKey": "USDC-ZORA",
+      "analyticsKey": "USDC-ZORA|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x1111111111166b7fe7bd91427724b487980afc69",
+          "days": 0
+        },
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "7b60d0bd-fb38-4871-b4e7-d3395cdb252d",
+      "project": "uniswap-v3",
+      "symbol": "ARB-USDC.E",
+      "chain": "Arbitrum",
+      "tvlUsd": 2211552,
+      "apy": 122.32169,
+      "pairKey": "ARB-USDC.E",
+      "analyticsKey": "ARB-USDC.E|arbitrum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x912ce59144191c1204e64559fe8253a0e49e6548",
+          "days": 0
+        },
+        {
+          "id": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "04e75569-5a9d-4000-8ca0-49ed53e17d8a",
+      "project": "aerodrome-slipstream",
+      "symbol": "MOG-WETH",
+      "chain": "Base",
+      "tvlUsd": 2549595,
+      "apy": 119.19349,
+      "pairKey": "MOG-WETH",
+      "analyticsKey": "MOG-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x2da56acb9ea78330f947bd57c54119debda7af71",
+          "days": 0
+        },
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "1b7d3f00-7c14-4cad-9252-3552b90a1c2a",
+      "project": "raydium-amm",
+      "symbol": "WSOL-SFG",
+      "chain": "Solana",
+      "tvlUsd": 1604111,
+      "apy": 118.45964,
+      "pairKey": "SFG-WSOL",
+      "analyticsKey": "SFG-WSOL|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "09623b9b-e4f4-4081-8c70-cc8a7b2d7e06",
+      "project": "cetus-amm",
+      "symbol": "USDC-ETH",
+      "chain": "Sui",
+      "tvlUsd": 2148148,
+      "apy": 118.05836,
+      "pairKey": "ETH-USDC",
+      "analyticsKey": "ETH-USDC|sui",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::usdc",
+          "days": 0
+        },
+        {
+          "id": "0xd0e89b2af5e4910726fbcd8b8dd37bb79b29e5f83f7491bca830e94f7f226d29::eth::eth",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "6e7d0984-9a39-4619-86e2-13b9aae221b8",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-ZEN",
+      "chain": "Base",
+      "tvlUsd": 2469561,
+      "apy": 116.72212,
+      "pairKey": "WETH-ZEN",
+      "analyticsKey": "WETH-ZEN|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xf43eb8de897fbc7f2502483b2bef7bb9ea179229",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "0dca8743-e0fd-4741-942c-f634b8743eb7",
+      "project": "uniswap-v2",
+      "symbol": "MANYU-WETH",
+      "chain": "Ethereum",
+      "tvlUsd": 1179375,
+      "apy": 114.85815,
+      "pairKey": "MANYU-WETH",
+      "analyticsKey": "MANYU-WETH|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x95af4af910c28e8ece4512bfe46f1f33687424ce",
+          "days": 0
+        },
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "577caee3-254c-405d-a642-17e6b47a52b6",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-USDT",
+      "chain": "Base",
+      "tvlUsd": 1202254,
+      "apy": 113.71291,
+      "pairKey": "USDT-WETH",
+      "analyticsKey": "USDT-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xfde4c96c8593536e31f229ea8f37b2ada2699bb2",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "170ad859-2d0f-43f9-b9e4-f6425d855fd7",
+      "project": "uniswap-v3",
+      "symbol": "WETH-BIO",
+      "chain": "Ethereum",
+      "tvlUsd": 2001146,
+      "apy": 112.52657,
+      "pairKey": "BIO-WETH",
+      "analyticsKey": "BIO-WETH|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        },
+        {
+          "id": "0xcb1592591996765ec0efc1f92599a19767ee5ffa",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "d3f1bb4f-6d3a-41f2-af1a-ae6baa4edd66",
+      "project": "raydium-amm",
+      "symbol": "WSOL-JELLYJELLY",
+      "chain": "Solana",
+      "tvlUsd": 2495325,
+      "apy": 111.72,
+      "pairKey": "JELLYJELLY-WSOL",
+      "analyticsKey": "JELLYJELLY-WSOL|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "122967c8-2fd5-4f43-95ff-ffcaeb99da09",
+      "project": "berapaw",
+      "symbol": "KODIEWBERA-4-OSBGT",
+      "chain": "Berachain",
+      "tvlUsd": 13854215,
+      "apy": 111.30975,
+      "pairKey": "4-KODIEWBERA-OSBGT",
+      "analyticsKey": "4-KODIEWBERA-OSBGT|berachain",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x0b77545a4eb1b995e79bf85e0ed8d6ee288ca632",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "b2cca178-6e44-4e34-bdec-693994727bc4",
+      "project": "uniswap-v3",
+      "symbol": "USDC-WETH",
+      "chain": "Optimism",
+      "tvlUsd": 1403474,
+      "apy": 110.71439,
+      "pairKey": "USDC-WETH",
+      "analyticsKey": "USDC-WETH|optimism",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+          "days": 0
+        },
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "fdd3dad9-ecd6-4c79-b378-5c7733873797",
+      "project": "uniswap-v2",
+      "symbol": "CARROT-USDC",
+      "chain": "Ethereum",
+      "tvlUsd": 1033685,
+      "apy": 109.65343,
+      "pairKey": "CARROT-USDC",
+      "analyticsKey": "CARROT-USDC|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x282a69142bac47855c3fbe1693fcc4ba3b4d5ed6",
+          "days": 0
+        },
+        {
+          "id": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "e8e45a86-cd5f-4d8e-9614-0dbd178da741",
+      "project": "joe-v2.1",
+      "symbol": "WAVAX-USDC",
+      "chain": "Avalanche",
+      "tvlUsd": 15200428,
+      "apy": 109.47007,
+      "pairKey": "USDC-WAVAX",
+      "analyticsKey": "USDC-WAVAX|avalanche",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+          "days": 0
+        },
+        {
+          "id": "0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "f946bdc8-e85d-4c7b-a550-2b0bf322992a",
+      "project": "hyperion",
+      "symbol": "APT-THAPT",
+      "chain": "Aptos",
+      "tvlUsd": 1498908,
+      "apy": 109.4462,
+      "pairKey": "APT-THAPT",
+      "analyticsKey": "APT-THAPT|aptos",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x000000000000000000000000000000000000000000000000000000000000000a",
+          "days": 0
+        },
+        {
+          "id": "0xa0d9d647c5737a5aed08d2cfeb39c31cf901d44bc4aa024eaa7e5e68b804e011",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "34e7f1d4-17ac-4862-bd33-f2242e05d7d8",
+      "project": "hyperion",
+      "symbol": "APT-USDT",
+      "chain": "Aptos",
+      "tvlUsd": 1048321,
+      "apy": 107.88438,
+      "pairKey": "APT-USDT",
+      "analyticsKey": "APT-USDT|aptos",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x000000000000000000000000000000000000000000000000000000000000000a",
+          "days": 0
+        },
+        {
+          "id": "0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "40727cc8-cbae-4a16-ae4c-d461211d2666",
+      "project": "joe-v2.1",
+      "symbol": "WETH.E-WAVAX",
+      "chain": "Avalanche",
+      "tvlUsd": 8417743,
+      "apy": 106.67021,
+      "pairKey": "WAVAX-WETH.E",
+      "analyticsKey": "WAVAX-WETH.E|avalanche",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab",
+          "days": 0
+        },
+        {
+          "id": "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "6b8631ad-e4cb-4b40-8e11-c033168c6f41",
+      "project": "maverick-v2",
+      "symbol": "USDC-WETH",
+      "chain": "Ethereum",
+      "tvlUsd": 1001714,
+      "apy": 105.62778,
+      "pairKey": "USDC-WETH",
+      "analyticsKey": "USDC-WETH|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "days": 0
+        },
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "907e479c-3d61-486f-9fae-3aa0978b57d0",
+      "project": "joe-v2.1",
+      "symbol": "WAVAX-BTC.B",
+      "chain": "Avalanche",
+      "tvlUsd": 6042569,
+      "apy": 104.6724,
+      "pairKey": "BTC.B-WAVAX",
+      "analyticsKey": "BTC.B-WAVAX|avalanche",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+          "days": 0
+        },
+        {
+          "id": "0x152b9d0fdc40c096757f570a51e494bd4b943e50",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "ef1b824f-d2d4-4630-83ac-3c09236019e9",
+      "project": "berapaw",
+      "symbol": "KODISWBERA-OSBGT",
+      "chain": "Berachain",
+      "tvlUsd": 16258925,
+      "apy": 102.69461,
+      "pairKey": "KODISWBERA-OSBGT",
+      "analyticsKey": "KODISWBERA-OSBGT|berachain",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x9a7d89284520572b3ec41efeba9add65622b301a",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "dded8585-a0b5-4453-bb6f-da7311398ac3",
+      "project": "uniswap-v3",
+      "symbol": "BIO-WETH",
+      "chain": "Base",
+      "tvlUsd": 2382580,
+      "apy": 102.19662,
+      "pairKey": "BIO-WETH",
+      "analyticsKey": "BIO-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x226a2fa2556c48245e57cd1cba4c6c9e67077dd2",
+          "days": 0
+        },
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "b3477c69-e154-492e-9533-62abb672ca30",
+      "project": "pancakeswap-amm-v3",
+      "symbol": "ORDER-WETH",
+      "chain": "Ethereum",
+      "tvlUsd": 1224933,
+      "apy": 100.91425,
+      "pairKey": "ORDER-WETH",
+      "analyticsKey": "ORDER-WETH|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xabd4c63d2616a5201454168269031355f4764337",
+          "days": 0
+        },
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "67aae5d6-af7b-4f9a-8be3-6a8767036f17",
+      "project": "comb-financial",
+      "symbol": "FTM-USDC",
+      "chain": "Fantom",
+      "tvlUsd": 1089199,
+      "apy": 100.5338,
+      "pairKey": "FTM-USDC",
+      "analyticsKey": "FTM-USDC|fantom",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83",
+          "days": 0
+        },
+        {
+          "id": "0x04068da6c83afcfa0e13ba15a6696662335d5b75",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "d18a3f4d-36e8-4d72-8abc-1c32cd6b8ded",
+      "project": "beefy",
+      "symbol": "WETH-DEGEN",
+      "chain": "Base",
+      "tvlUsd": 1799494,
+      "apy": 99.81088,
+      "pairKey": "DEGEN-WETH",
+      "analyticsKey": "DEGEN-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "f2f3c91c-e933-47ef-a67d-46499b816bdd",
+      "project": "beefy",
+      "symbol": "CRO-WBTC",
+      "chain": "Cronos",
+      "tvlUsd": 1695985,
+      "apy": 99.07962,
+      "pairKey": "CRO-WBTC",
+      "analyticsKey": "CRO-WBTC|cronos",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x0000000000000000000000000000000000000000",
+          "days": 0
+        },
+        {
+          "id": "0x062e66477faf219f25d27dced647bf57c3107d52",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "7f0299d7-e03a-4914-933c-abc994c17086",
+      "project": "cetus-amm",
+      "symbol": "USDC-SUI",
+      "chain": "Sui",
+      "tvlUsd": 6240999,
+      "apy": 96.43879,
+      "pairKey": "SUI-USDC",
+      "analyticsKey": "SUI-USDC|sui",
+      "hasAnalytics": true,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::usdc",
+          "days": 0
+        },
+        {
+          "id": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::sui",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "e703b24a-b2bf-4bd1-924e-0cc5776abecf",
+      "project": "francium",
+      "symbol": "SOL-USDC",
+      "chain": "Solana",
+      "tvlUsd": 6729509,
+      "apy": 96.09262,
+      "pairKey": "SOL-USDC",
+      "analyticsKey": "SOL-USDC|solana",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": true,
+      "tokenPoints": []
+    },
+    {
+      "pool": "b99bcdf5-1350-4269-981e-0e9b5cccb007",
+      "project": "uniswap-v3",
+      "symbol": "WETH-USDC",
+      "chain": "Base",
+      "tvlUsd": 14701023,
+      "apy": 92.81254,
+      "pairKey": "USDC-WETH",
+      "analyticsKey": "USDC-WETH|base",
+      "hasAnalytics": true,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "40ce2ba9-2ad3-40cb-8f4a-370321435f9f",
+      "project": "berapaw",
+      "symbol": "KODIWBERA-IBGT",
+      "chain": "Berachain",
+      "tvlUsd": 5673450,
+      "apy": 91.74358,
+      "pairKey": "IBGT-KODIWBERA",
+      "analyticsKey": "IBGT-KODIWBERA|berachain",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x564f011d557aad1ca09bfc956eb8a17c35d490e0",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "a68b676f-e3f2-4962-b034-635f1e180eb7",
+      "project": "curve-dex",
+      "symbol": "IQ-FRXUSD",
+      "chain": "Fraxtal",
+      "tvlUsd": 1001644,
+      "apy": 91.33481,
+      "pairKey": "FRXUSD-IQ",
+      "analyticsKey": "FRXUSD-IQ|fraxtal",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x6efb84bda519726fa1c65558e520b92b51712101",
+          "days": 0
+        },
+        {
+          "id": "0xfc00000000000000000000000000000000000001",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "f674d4c8-768d-4511-909e-f693f0b634d7",
+      "project": "hyperion",
+      "symbol": "APT-STAPT",
+      "chain": "Aptos",
+      "tvlUsd": 1459002,
+      "apy": 91.28477,
+      "pairKey": "APT-STAPT",
+      "analyticsKey": "APT-STAPT|aptos",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x000000000000000000000000000000000000000000000000000000000000000a",
+          "days": 0
+        },
+        {
+          "id": "0xb614bfdf9edc39b330bbf9c3c5bcd0473eee2f6d4e21748629cc367869ece627",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "18329564-f261-4b1a-ac91-b77c7e8e9fb8",
+      "project": "berapaw",
+      "symbol": "KODIWBTC-WBERA",
+      "chain": "Berachain",
+      "tvlUsd": 3753062,
+      "apy": 88.88761,
+      "pairKey": "KODIWBTC-WBERA",
+      "analyticsKey": "KODIWBTC-WBERA|berachain",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xf06ea29fcf4765200742d29e685973a1870eac98",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "c065d271-b808-49c9-815c-ec75a96a4833",
+      "project": "uniswap-v3",
+      "symbol": "USDT-WBNB",
+      "chain": "BSC",
+      "tvlUsd": 3993285,
+      "apy": 88.04837,
+      "pairKey": "USDT-WBNB",
+      "analyticsKey": "USDT-WBNB|bsc",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x55d398326f99059ff775485246999027b3197955",
+          "days": 0
+        },
+        {
+          "id": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "45442536-fe46-4c20-8cf9-f2bf9d625b59",
+      "project": "uniswap-v3",
+      "symbol": "DRB-WETH",
+      "chain": "Base",
+      "tvlUsd": 1265596,
+      "apy": 87.6846,
+      "pairKey": "DRB-WETH",
+      "analyticsKey": "DRB-WETH|base",
+      "hasAnalytics": true,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x3ec2156d4c0a9cbdab4a016633b7bcf6a8d68ea2",
+          "days": 0
+        },
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "94594b8f-fd0c-48c3-b760-87c8e56b64fa",
+      "project": "uniswap-v3",
+      "symbol": "WETH-USDC",
+      "chain": "Arbitrum",
+      "tvlUsd": 11591209,
+      "apy": 87.14417,
+      "pairKey": "USDC-WETH",
+      "analyticsKey": "USDC-WETH|arbitrum",
+      "hasAnalytics": true,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "days": 0
+        },
+        {
+          "id": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "db803811-64cd-49ad-a08e-f2a28f4209cc",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-USD+",
+      "chain": "Base",
+      "tvlUsd": 3505064,
+      "apy": 86.4776,
+      "pairKey": "USD+-WETH",
+      "analyticsKey": "USD+-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xb79dd08ea68a908a97220c76d19a6aa9cbde4376",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "7f1c4126-3998-4334-9ce3-c640e869d682",
+      "project": "uniswap-v3",
+      "symbol": "SYRUP-WETH",
+      "chain": "Ethereum",
+      "tvlUsd": 2668442,
+      "apy": 85.82217,
+      "pairKey": "SYRUP-WETH",
+      "analyticsKey": "SYRUP-WETH|ethereum",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x643c4e15d7d62ad0abec4a9bd4b001aa3ef52d66",
+          "days": 0
+        },
+        {
+          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "cf22ab20-25de-4d5f-9ffa-aaa284dc7d35",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-USUI",
+      "chain": "Base",
+      "tvlUsd": 2728241,
+      "apy": 84.20209,
+      "pairKey": "USUI-WETH",
+      "analyticsKey": "USUI-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0xb0505e5a99abd03d94a1169e638b78edfed26ea4",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "a14bd201-764c-40a5-86b8-2928b2461232",
+      "project": "uniswap-v3",
+      "symbol": "WETH-USDC",
+      "chain": "Arbitrum",
+      "tvlUsd": 78087983,
+      "apy": 83.12311,
+      "pairKey": "USDC-WETH",
+      "analyticsKey": "USDC-WETH|arbitrum",
+      "hasAnalytics": true,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "days": 0
+        },
+        {
+          "id": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "d4b07c05-c2b1-4c14-8e30-b432adacc39a",
+      "project": "berapaw",
+      "symbol": "AWBERA-IBGT",
+      "chain": "Berachain",
+      "tvlUsd": 1283353,
+      "apy": 83.1024,
+      "pairKey": "AWBERA-IBGT",
+      "analyticsKey": "AWBERA-IBGT|berachain",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0xcffbfd665bedb19b47837461a5abf4388c560d35",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "6cf96588-3d2a-47b3-a2da-8e4e25d5a5fa",
+      "project": "zeebu",
+      "symbol": "ZBU",
+      "chain": "BSC",
+      "tvlUsd": 13438633,
+      "apy": 82.62754,
+      "pairKey": "ZBU",
+      "analyticsKey": "ZBU|bsc",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4d3dc895a9edb234dfa3e303a196c009dc918f84",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "pool": "778c6d99-9148-4f58-91a7-11232060b95f",
+      "project": "aerodrome-slipstream",
+      "symbol": "WETH-SPX",
+      "chain": "Base",
+      "tvlUsd": 2766577,
+      "apy": 80.96767,
+      "pairKey": "SPX-WETH",
+      "analyticsKey": "SPX-WETH|base",
+      "hasAnalytics": false,
+      "hasSeries": false,
+      "seriesPoints": 0,
+      "tokensOK": false,
+      "tokenPoints": [
+        {
+          "id": "0x4200000000000000000000000000000000000006",
+          "days": 0
+        },
+        {
+          "id": "0x50da645f148798f68ef2d7db7c1cb22a6819bb2c",
+          "days": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 // Zerion API client for comprehensive DeFi portfolio tracking
-import axios from 'axios';
+import axios, { AxiosInstance, isAxiosError } from 'axios';
 
 const ZERION_BASE_URL = 'https://api.zerion.io';
 const WALLET_ADDRESS = '0x862f26238d773Fde4E29156f3Bb7CF58eA4cD1af';
@@ -77,13 +77,18 @@ interface ZerionTransactionResponse {
 }
 
 class ZerionAPI {
-  private client: axios.AxiosInstance;
+  private client: AxiosInstance;
+  private enabled: boolean = true;
 
   constructor() {
     const apiKey = process.env.ZERION_API_KEY || process.env.NEXT_PUBLIC_ZERION_API_KEY;
     
     if (!apiKey) {
-      throw new Error('ZERION_API_KEY not found in environment variables');
+      this.enabled = false;
+      // Create a placeholder client to avoid undefined checks; calls will guard on enabled
+      this.client = axios.create({ baseURL: ZERION_BASE_URL });
+      console.warn('Zerion API is disabled: ZERION_API_KEY not configured');
+      return;
     }
 
     this.client = axios.create({
@@ -106,6 +111,7 @@ class ZerionAPI {
   // Get wallet portfolio positions
   async getWalletPositions(walletAddress: string = WALLET_ADDRESS): Promise<ZerionPortfolioResponse> {
     try {
+      if (!this.enabled) throw new Error('authorization: ZERION_API_KEY not configured');
       console.log(`🔍 Fetching Zerion portfolio for wallet: ${walletAddress}`);
       
       const response = await this.client.get(
@@ -124,7 +130,7 @@ class ZerionAPI {
       
     } catch (error) {
       console.error('❌ Error fetching Zerion portfolio:', error);
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         console.error('Response status:', error.response?.status);
         console.error('Response data:', error.response?.data);
       }
@@ -135,6 +141,7 @@ class ZerionAPI {
   // Get wallet transactions
   async getWalletTransactions(walletAddress: string = WALLET_ADDRESS, limit = 50): Promise<ZerionTransactionResponse> {
     try {
+      if (!this.enabled) throw new Error('authorization: ZERION_API_KEY not configured');
       console.log(`🔍 Fetching Zerion transactions for wallet: ${walletAddress}`);
       
       const response = await this.client.get(
@@ -159,6 +166,7 @@ class ZerionAPI {
   // Get DeFi positions only
   async getDeFiPositions(walletAddress: string = WALLET_ADDRESS): Promise<ZerionPosition[]> {
     try {
+      if (!this.enabled) throw new Error('authorization: ZERION_API_KEY not configured');
       const portfolio = await this.getWalletPositions(walletAddress);
       
       // Filter for DeFi positions (not simple wallet holdings)
@@ -182,6 +190,7 @@ class ZerionAPI {
   // Get portfolio summary with totals
   async getPortfolioSummary(walletAddress: string = WALLET_ADDRESS) {
     try {
+      if (!this.enabled) throw new Error('authorization: ZERION_API_KEY not configured');
       const positions = await this.getWalletPositions(walletAddress);
       
       let totalValue = 0;

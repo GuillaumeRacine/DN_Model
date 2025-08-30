@@ -1,71 +1,23 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import { dataCache, CACHE_KEYS } from './data-cache';
+import { buildDefaultAccountFetcher, PDAUtil, PriceMath } from '@orca-so/whirlpools-sdk';
+import { getTokenAFromLiquidity, getTokenBFromLiquidity, PositionUtil } from '@orca-so/whirlpools-sdk/dist/utils/position-util';
+import { getSolanaMintPrices } from './token-prices';
 
-// Known token information for accurate display
+// Known token information for accurate display (from actual on-chain data)
 const TOKEN_INFO: { [key: string]: { symbol: string; name: string; decimals: number } } = {
   'So11111111111111111111111111111111111111112': { symbol: 'SOL', name: 'Solana', decimals: 9 },
   'cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij': { symbol: 'cbBTC', name: 'Coinbase Wrapped BTC', decimals: 8 },
   '3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh': { symbol: 'WBTC', name: 'Wrapped Bitcoin', decimals: 8 },
   'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': { symbol: 'USDC', name: 'USD Coin', decimals: 6 },
+  // Additional tokens found in actual positions
+  '5qk7fzUy9SYi2oHBDHXvmPuLNaxCvkjMck1g1c1dq9NK': { symbol: 'WBTC', name: 'Wrapped Bitcoin (Orca)', decimals: 8 },
+  'FWiLr7QtETCRs3CxFTAMmLynitX8uEjw9HxpFjxKQrAe': { symbol: 'USDC', name: 'USD Coin (Orca)', decimals: 6 },
+  'DYkz5CCMUshPUso6Eg25f2kw5cnexYAKSrN6ZMSPM2xS': { symbol: 'cbBTC', name: 'Coinbase Wrapped BTC (Orca)', decimals: 8 },
 };
 
-// Orca position data that matches the app exactly
-const ACCURATE_POSITIONS = {
-  'J9boQJgr4xefqoBJcYCNtfRXpiLwje5DW3fksH4bGkbX': {
-    tokenAccount: 'FE1VVxiLxdUnBw1MA7ScHXaF98i2q9oiXnhnwK6x3ZsB',
-    pair: 'cbBTC/SOL',
-    protocol: 'Orca',
-    balance: 46341.02,
-    pendingYield: 190.27,
-    apy: 59.877,
-    currentPrice: 532.31,
-    currentPriceLabel: 'SOL per cbBTC',
-    rangeLower: 455.32,
-    rangeUpper: 682.51,
-    inRange: true,
-    rangeStatus: 'IN RANGE',
-    poolShare: 0.16,
-    tokenA: 'cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij',
-    tokenB: 'So11111111111111111111111111111111111111112',
-    whirlpool: 'CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN'
-  },
-  '3P832skDFHaohd2kmnJh36nKTHjpW1V6Sr8mGH6PahDZ': {
-    tokenAccount: 'DH2Wr385mowQ8wEi6wqWPrK4T9HxeKPbMUcumnLu9VnA',
-    pair: 'WBTC/SOL',
-    protocol: 'Orca',
-    balance: 41006.14,
-    pendingYield: 119.24,
-    apy: 39.935,
-    currentPrice: 532.54,
-    currentPriceLabel: 'SOL per WBTC',
-    rangeLower: 427.09,
-    rangeUpper: 712.07,
-    inRange: true,
-    rangeStatus: 'IN RANGE',
-    poolShare: 0.05,
-    tokenA: '3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh',
-    tokenB: 'So11111111111111111111111111111111111111112',
-    whirlpool: 'B5EwJVDuAauzUEEdwvbuXzbFFgEYnUqqS37TUM1c4PQA'
-  },
-  'BGzAwP84gsVfB3p2miNb5spC59nX6Q2UfMyPg3RX4DKa': {
-    tokenAccount: 'EmnwXx7swzFzABcZ2UnknPRNrFiH8shBnM5bFg6zEiZZ',
-    pair: 'cbBTC/USDC',
-    protocol: 'Orca',
-    balance: 17574.06,
-    pendingYield: 76.88,
-    apy: 43.249,
-    currentPrice: 112100,
-    currentPriceLabel: 'USDC per cbBTC',
-    rangeLower: 106400,
-    rangeUpper: 121600,
-    inRange: true,
-    rangeStatus: 'IN RANGE',
-    poolShare: 0.04,
-    tokenA: 'cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij',
-    tokenB: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-    whirlpool: 'HxA6SKW5qA4o12fjVgTpXdq2YnZ5Zv1s7SB4FFomsyLM'
-  }
-};
+// REMOVED: All hardcoded financial data - will only use verifiable on-chain data
+// This ensures no mock data is used in the application
 
 export interface AccurateOrcaPosition {
   id: string;
@@ -118,6 +70,12 @@ export class AccurateOrcaFetcher {
     const cacheKey = 'accurate_orca_positions';
     
     try {
+      // Feature flag: disable Orca positions unless explicitly enabled to avoid placeholder data
+      if (process.env.ENABLE_ORCA_POSITIONS !== 'true') {
+        console.log('ℹ️ Orca positions disabled (ENABLE_ORCA_POSITIONS!=true)');
+        return [];
+      }
+
       // Check cache first
       const cached = dataCache.get<AccurateOrcaPosition[]>(cacheKey);
       if (cached) {
@@ -138,69 +96,74 @@ export class AccurateOrcaFetcher {
 
       console.log(`📊 Found ${token2022Accounts.value.length} Token2022 accounts`);
 
-      // Step 2: Find position NFTs and match with accurate data
+      // Step 2: Find position NFTs - scan for Orca Whirlpool positions
       const verifiedPositions: AccurateOrcaPosition[] = [];
+      
+      // Known position mints to scan for (from investigation scripts)
+      const knownOrcaMints = [
+        'J9boQJgr4xefqoBJcYCNtfRXpiLwje5DW3fksH4bGkbX', // cbBTC/SOL
+        '3P832skDFHaohd2kmnJh36nKTHjpW1V6Sr8mGH6PahDZ', // WBTC/SOL  
+        'BGzAwP84gsVfB3p2miNb5spC59nX6Q2UfMyPg3RX4DKa'  // cbBTC/USDC
+      ];
       
       for (const account of token2022Accounts.value) {
         if (account.account.data?.parsed?.info) {
           const info = account.account.data.parsed.info;
           
-          // Check if it's an NFT (amount=1, decimals=0) and we have accurate data for it
+          // Check if it's an NFT (amount=1, decimals=0) and is a known Orca position
           if (info.tokenAmount?.uiAmount === 1 && 
               info.tokenAmount?.decimals === 0 && 
-              ACCURATE_POSITIONS[info.mint]) {
+              knownOrcaMints.includes(info.mint)) {
             
             const mintAddress = info.mint;
             const tokenAccount = account.pubkey.toString();
-            const accurateData = ACCURATE_POSITIONS[mintAddress];
             
-            // Verify the token account matches our expectation
-            if (tokenAccount === accurateData.tokenAccount) {
-              console.log(`✅ Verified position: ${accurateData.pair}`);
+            console.log(`✅ Found Orca position NFT: ${mintAddress}`);
+            
+            try {
+              // Get position details from on-chain data
+              const positionData = await this.getPositionFromChain(mintAddress);
               
-              const tokenAInfo = TOKEN_INFO[accurateData.tokenA] || { symbol: 'Unknown', name: 'Unknown', decimals: 9 };
-              const tokenBInfo = TOKEN_INFO[accurateData.tokenB] || { symbol: 'Unknown', name: 'Unknown', decimals: 9 };
-              
-              const position: AccurateOrcaPosition = {
-                id: mintAddress.slice(-8),
-                tokenAccount: tokenAccount,
-                chain: 'Solana',
-                protocol: 'Orca',
-                type: 'Whirlpool',
-                tokenPair: accurateData.pair,
-                nftMint: mintAddress,
-                whirlpool: accurateData.whirlpool,
+              if (positionData) {
+                const position: AccurateOrcaPosition = {
+                  id: mintAddress.slice(-8),
+                  tokenAccount: tokenAccount,
+                  chain: 'Solana',
+                  protocol: 'Orca',
+                  type: 'Whirlpool',
+                  tokenPair: positionData.tokenPair,
+                  nftMint: mintAddress,
+                  whirlpool: positionData.whirlpool,
+                  
+                  // On-chain financial data
+                  tvlUsd: positionData.tvlUsd,
+                  pendingYield: positionData.pendingYieldUsd || 0, // USD value of uncollected fees
+                  apr: 0,
+                  poolShare: positionData.poolShare || 0,
+                  
+                  // On-chain price and range data
+                  currentPrice: positionData.currentPrice,
+                  priceLower: positionData.priceLower,
+                  priceUpper: positionData.priceUpper,
+                  priceLabel: positionData.priceLabel,
+                  
+                  // Status
+                  inRange: positionData.inRange,
+                  confirmed: true,
+                  lastUpdated: new Date(),
+                  dataSource: 'Helius RPC + On-Chain Data',
+                  
+                  // Token info
+                  tokenA: positionData.tokenA,
+                  tokenB: positionData.tokenB,
+                  tokenAInfo: TOKEN_INFO[positionData.tokenA] || { symbol: 'Unknown', name: 'Unknown', decimals: 9 },
+                  tokenBInfo: TOKEN_INFO[positionData.tokenB] || { symbol: 'Unknown', name: 'Unknown', decimals: 9 },
+                };
                 
-                // Accurate financial data from Orca app
-                tvlUsd: accurateData.balance,
-                pendingYield: accurateData.pendingYield,
-                apr: accurateData.apy,
-                poolShare: accurateData.poolShare,
-                
-                // Accurate price and range data
-                currentPrice: accurateData.currentPrice,
-                priceLower: accurateData.rangeLower,
-                priceUpper: accurateData.rangeUpper,
-                priceLabel: accurateData.currentPriceLabel,
-                
-                // Status
-                inRange: accurateData.inRange,
-                confirmed: true,
-                lastUpdated: new Date(),
-                dataSource: 'Helius RPC + Orca App Data',
-                
-                // Token info
-                tokenA: accurateData.tokenA,
-                tokenB: accurateData.tokenB,
-                tokenAInfo,
-                tokenBInfo,
-              };
-              
-              verifiedPositions.push(position);
-            } else {
-              console.log(`⚠️  Token account mismatch for ${accurateData.pair}`);
-              console.log(`   Expected: ${accurateData.tokenAccount}`);
-              console.log(`   Found: ${tokenAccount}`);
+                verifiedPositions.push(position);
+              }
+            } catch (error) {
+              console.error(`❌ Error processing position ${mintAddress}:`, error);
             }
           }
         }
@@ -242,24 +205,138 @@ export class AccurateOrcaFetcher {
     return totalAPR / positions.length;
   }
 
-  // Method to update accurate data when Orca app data changes
-  static updateAccurateData(mintAddress: string, newData: Partial<typeof ACCURATE_POSITIONS[keyof typeof ACCURATE_POSITIONS]>) {
-    if (ACCURATE_POSITIONS[mintAddress]) {
-      ACCURATE_POSITIONS[mintAddress] = { ...ACCURATE_POSITIONS[mintAddress], ...newData };
+  // Method to get position data using Orca Whirlpools SDK (accurate)
+  private async getPositionFromChain(mintAddress: string) {
+    try {
+      const programId = new PublicKey('whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc');
+      const fetcher = buildDefaultAccountFetcher(this.connection);
+      const positionPda = PDAUtil.getPosition(programId, new PublicKey(mintAddress)).publicKey;
+
+      const pos = await fetcher.getPosition(positionPda);
+      if (!pos) return null;
+
+      const whirlpool = await fetcher.getPool(pos.whirlpool);
+      if (!whirlpool) return null;
+
+      const mintA = await fetcher.getMintInfo(whirlpool.tokenMintA);
+      const mintB = await fetcher.getMintInfo(whirlpool.tokenMintB);
+      if (!mintA || !mintB) return null;
+
+      const decimalsA = mintA.decimals;
+      const decimalsB = mintB.decimals;
+
+      const priceLower = PriceMath.tickIndexToPrice(pos.tickLowerIndex, decimalsA, decimalsB).toNumber();
+      const priceUpper = PriceMath.tickIndexToPrice(pos.tickUpperIndex, decimalsA, decimalsB).toNumber();
+      const currentPrice = PriceMath.sqrtPriceX64ToPrice(whirlpool.sqrtPrice, decimalsA, decimalsB).toNumber();
+
+      // Compute token amounts from liquidity using SDK utilities
+      const sqrtLower = PriceMath.tickIndexToSqrtPriceX64(pos.tickLowerIndex);
+      const sqrtUpper = PriceMath.tickIndexToSqrtPriceX64(pos.tickUpperIndex);
+      const currSqrt = whirlpool.sqrtPrice;
+      const L = pos.liquidity; // BN
+
+      let amountA = null;
+      let amountB = null;
+      const status = PositionUtil.getPositionStatus(whirlpool.tickCurrentIndex, pos.tickLowerIndex, pos.tickUpperIndex);
+      if (status === 0) { // BelowRange: all in token A
+        amountA = getTokenAFromLiquidity(L, sqrtLower, sqrtUpper, false);
+        amountB = null;
+      } else if (status === 2) { // AboveRange: all in token B
+        amountA = null;
+        amountB = getTokenBFromLiquidity(L, sqrtLower, sqrtUpper, false);
+      } else { // InRange
+        amountA = getTokenAFromLiquidity(L, currSqrt, sqrtUpper, false);
+        amountB = getTokenBFromLiquidity(L, sqrtLower, currSqrt, false);
+      }
+
+      const amountAFloat = amountA ? Number(amountA.toString()) / Math.pow(10, decimalsA) : 0;
+      const amountBFloat = amountB ? Number(amountB.toString()) / Math.pow(10, decimalsB) : 0;
+
+      // Fetch USD prices for Solana mints
+      const prices = await getSolanaMintPrices([whirlpool.tokenMintA.toBase58(), whirlpool.tokenMintB.toBase58()]);
+      const pA = prices[whirlpool.tokenMintA.toBase58()] ?? 0;
+      const pB = prices[whirlpool.tokenMintB.toBase58()] ?? 0;
+      const tvlUsd = amountAFloat * pA + amountBFloat * pB;
+
+      // Uncollected fees (USD)
+      const feeA = Number(pos.feeOwedA.toString()) / Math.pow(10, decimalsA);
+      const feeB = Number(pos.feeOwedB.toString()) / Math.pow(10, decimalsB);
+      const pendingYieldUsd = feeA * pA + feeB * pB;
+
+      // Pool share
+      let poolShare = 0;
+      try {
+        const Lpos = Number(pos.liquidity.toString());
+        const Lpool = Number(whirlpool.liquidity.toString());
+        if (Lpool > 0) poolShare = Lpos / Lpool;
+      } catch {}
+
+      const tokenA = whirlpool.tokenMintA.toBase58();
+      const tokenB = whirlpool.tokenMintB.toBase58();
+      const tokenAInfo = TOKEN_INFO[tokenA];
+      const tokenBInfo = TOKEN_INFO[tokenB];
+      const tokenPair = tokenAInfo && tokenBInfo ? `${tokenAInfo.symbol}/${tokenBInfo.symbol}` : `${tokenA.slice(0,4)}../${tokenB.slice(0,4)}..`;
+
+      const inRange = whirlpool.tickCurrentIndex >= pos.tickLowerIndex && whirlpool.tickCurrentIndex < pos.tickUpperIndex;
+
+      return {
+        tokenPair,
+        whirlpool: pos.whirlpool.toBase58(),
+        tokenA,
+        tokenB,
+        priceLower,
+        priceUpper,
+        currentPrice,
+        priceLabel: `${priceLower.toFixed(4)} - ${priceUpper.toFixed(4)}`,
+        inRange,
+        tvlUsd,
+        pendingYieldUsd,
+        poolShare
+      };
+
+    } catch (error) {
+      console.error(`Error fetching position data for ${mintAddress}:`, error);
+      return null;
     }
   }
 
-  // Method to verify on-chain data matches our accurate data
+  // Pricing now handled by shared token-prices cache
+
+  // Helper method to convert tick to price with bounds checking
+  private tickToPrice(tick: number): number {
+    // Clamp tick to reasonable bounds to avoid Infinity
+    const MAX_TICK = 443636;
+    const MIN_TICK = -443636;
+    
+    const clampedTick = Math.max(MIN_TICK, Math.min(MAX_TICK, tick));
+    
+    if (clampedTick !== tick) {
+      console.log(`⚠️  Tick ${tick} clamped to ${clampedTick}`);
+    }
+    
+    return Math.pow(1.0001, clampedTick);
+  }
+
+  // Remove placeholder TVL estimation — keep zero until token amounts are decoded properly
+
+  // Method to verify on-chain data matches blockchain state
   async verifyAgainstOnChain(): Promise<{ verified: boolean; discrepancies: string[] }> {
     const discrepancies: string[] = [];
     
     try {
-      // This would implement actual on-chain verification
-      // For now, we trust the Orca app data as ground truth
       console.log('📋 Verification against on-chain data...');
-      console.log('✅ All positions verified against Orca app data');
       
-      return { verified: true, discrepancies };
+      const positions = await this.getAccuratePositions();
+      console.log(`✅ Successfully fetched ${positions.length} positions from on-chain data`);
+      
+      // Basic validation
+      for (const position of positions) {
+        if (!position.nftMint || !position.whirlpool) {
+          discrepancies.push(`Position ${position.id} missing required data`);
+        }
+      }
+      
+      return { verified: discrepancies.length === 0, discrepancies };
     } catch (error) {
       discrepancies.push(`Verification failed: ${error}`);
       return { verified: false, discrepancies };

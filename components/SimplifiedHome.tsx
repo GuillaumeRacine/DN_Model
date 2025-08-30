@@ -68,92 +68,32 @@ export default function SimplifiedHome() {
         {
           symbol: 'BTC',
           name: 'Bitcoin',
-          price: pricesData.coins?.['coingecko:bitcoin']?.price || 111333,
-          marketCap: pricesData.coins?.['coingecko:bitcoin']?.mcap || 2180000000000,
-          change24h: 2.5,
-          change7d: 7.8,   // 7-day change
-          change30d: 18.5, // 30-day change
-          activeUsers: 106000000, // Active Bitcoin addresses (approximate)
-          cagr1y: 125.6,  // 1-year CAGR
-          cagr2y: 89.3,   // 2-year CAGR
-          cagr3y: 45.8,   // 3-year CAGR  
-          cagr4y: 38.2,   // 4-year CAGR
-          cagr5y: 52.1    // 5-year CAGR
+          price: pricesData.coins?.['coingecko:bitcoin']?.price,
+          marketCap: pricesData.coins?.['coingecko:bitcoin']?.mcap,
         },
         {
           symbol: 'ETH',
           name: 'Ethereum',
-          price: pricesData.coins?.['coingecko:ethereum']?.price || 3920,
-          marketCap: pricesData.coins?.['coingecko:ethereum']?.mcap || 470000000000,
-          change24h: 3.8,
-          change7d: 12.2,  // 7-day change
-          change30d: 28.1, // 30-day change
-          activeUsers: 87000000, // Active Ethereum addresses
-          cagr1y: 85.4,   // 1-year CAGR
-          cagr2y: 67.2,   // 2-year CAGR
-          cagr3y: 28.9,   // 3-year CAGR
-          cagr4y: 41.6,   // 4-year CAGR
-          cagr5y: 48.7    // 5-year CAGR
+          price: pricesData.coins?.['coingecko:ethereum']?.price,
+          marketCap: pricesData.coins?.['coingecko:ethereum']?.mcap,
         },
         {
           symbol: 'SOL',
           name: 'Solana',
-          price: pricesData.coins?.['coingecko:solana']?.price || 235,
-          marketCap: pricesData.coins?.['coingecko:solana']?.mcap || 110000000000,
-          change24h: 5.2,
-          change7d: 18.6,  // 7-day change
-          change30d: 45.2, // 30-day change
-          activeUsers: 2800000, // Daily active Solana users
-          cagr1y: 520.3,  // 1-year CAGR (explosive growth)
-          cagr2y: 125.8,  // 2-year CAGR
-          cagr3y: -12.4,  // 3-year CAGR (bear market impact)
-          cagr4y: 89.7,   // 4-year CAGR
-          cagr5y: 156.2   // 5-year CAGR (early adoption gains)
+          price: pricesData.coins?.['coingecko:solana']?.price,
+          marketCap: pricesData.coins?.['coingecko:solana']?.mcap,
         },
         {
           symbol: 'SUI',
           name: 'Sui',
-          price: pricesData.coins?.['coingecko:sui']?.price || 5.12,
-          marketCap: pricesData.coins?.['coingecko:sui']?.mcap || 14500000000,
-          change24h: 8.9,
-          change7d: 32.1,  // 7-day change
-          change30d: 125.8, // 30-day change
-          activeUsers: 1200000, // Daily active Sui users
-          cagr1y: 445.7,  // 1-year CAGR (new token explosive growth)
-          cagr2y: 285.4,  // 2-year CAGR
-          cagr3y: null,   // N/A (token too new)
-          cagr4y: null,   // N/A (token too new)
-          cagr5y: null    // N/A (token too new)
+          price: pricesData.coins?.['coingecko:sui']?.price,
+          marketCap: pricesData.coins?.['coingecko:sui']?.mcap,
         },
       ];
       setTokens(tokenData);
 
-      // Mock ETF data aggregated by token/chain with trend analysis
-      const mockETFData: ETFData[] = [
-        {
-          token: 'BTC',
-          tokenName: 'Bitcoin',
-          totalETFs: 11, // Total number of Bitcoin ETFs
-          aggregateInflow24h: 472000000, // Sum of all BTC ETF inflows (325M + 189M - 42M = 472M)
-          aggregateInflow7d: 2850000000, // 7-day inflow (~2.85B)
-          totalAUM: 102900000000, // Combined AUM across all BTC ETFs (~103B)
-          percentOfTotalSupply: 5.12, // % of total 21M BTC supply held by all ETFs
-          totalSupply: 21000000, // Total BTC supply
-          inflowTrend: 'accelerating' // Daily average increasing vs previous period
-        },
-        {
-          token: 'ETH',
-          tokenName: 'Ethereum', 
-          totalETFs: 9, // Total number of Ethereum ETFs
-          aggregateInflow24h: -23000000, // Net outflow across all ETH ETFs
-          aggregateInflow7d: -89000000, // 7-day outflow (~-89M)
-          totalAUM: 8400000000, // Combined AUM across all ETH ETFs (~8.4B)
-          percentOfTotalSupply: 2.18, // % of total ~120M ETH supply held by all ETFs
-          totalSupply: 120345678, // Approximate total ETH supply
-          inflowTrend: 'decelerating' // Outflows are slowing down (less negative)
-        }
-      ];
-      setETFData(mockETFData);
+      // No ETF data source configured → leave empty to avoid mock data
+      setETFData([]);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -162,13 +102,15 @@ export default function SimplifiedHome() {
     }
   };
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price?: number) => {
+    if (price === undefined || price === null) return 'N/A';
     if (price >= 1000) return `$${price.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
     if (price >= 1) return `$${price.toFixed(2)}`;
     return `$${price.toFixed(4)}`;
   };
 
-  const formatMarketCap = (marketCap: number) => {
+  const formatMarketCap = (marketCap?: number) => {
+    if (marketCap === undefined || marketCap === null) return 'N/A';
     if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
     if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
     if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
@@ -458,7 +400,7 @@ export default function SimplifiedHome() {
       )}
 
       {/* ETF Holdings Table */}
-      {activeView === 'etf' && (
+      {activeView === 'etf' && etfData.length > 0 && (
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -538,6 +480,11 @@ export default function SimplifiedHome() {
             Total 24H Flow: {formatInflow(etfData.reduce((sum, etf) => sum + etf.aggregateInflow24h, 0))} | 
             Total AUM: {formatMarketCap(etfData.reduce((sum, etf) => sum + etf.totalAUM, 0))}
           </div>
+        </div>
+      )}
+      {activeView === 'etf' && etfData.length === 0 && (
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 text-sm text-gray-600 dark:text-gray-300">
+          ETF data is not configured. Provide a real data source to enable this view.
         </div>
       )}
       

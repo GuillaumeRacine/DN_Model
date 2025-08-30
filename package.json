@@ -4,7 +4,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "type-check": "tsc --noEmit",
+    "lint": "next lint",
+    "save-top-pools": "node scripts/save-top-pools.js --minTVL 1000000 --limit 500",
+    "build-fvr-analytics": "node scripts/build-fvr-analytics.js",
+    "check-pools-quality": "node scripts/check-pools-quality.js"
   },
   "dependencies": {
     "@cetusprotocol/cetus-sui-clmm-sdk": "^5.4.0",
@@ -27,6 +32,9 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "recharts": "^3.1.2",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "zustand": "^4.4.0"
   },
   "devDependencies": {

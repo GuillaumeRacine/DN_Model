@@ -3,6 +3,16 @@ import { zerionAPI } from '../../../lib/zerion-api';
 
 export async function GET(request: NextRequest) {
   try {
+    // Early auth check to avoid constructor errors
+    const hasKey = !!(process.env.ZERION_API_KEY || process.env.NEXT_PUBLIC_ZERION_API_KEY);
+    if (!hasKey) {
+      return NextResponse.json({
+        success: false,
+        error: 'ZERION_API_KEY not configured',
+        type: 'auth_error',
+        timestamp: new Date().toISOString()
+      }, { status: 401 });
+    }
     console.log('🚀 Zerion Portfolio API called');
     
     const searchParams = request.nextUrl.searchParams;
